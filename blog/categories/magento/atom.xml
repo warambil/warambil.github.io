@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Magento | Wilman Arambillete]]></title>
+  <link href="http://warambil.github.io/blog/categories/magento/atom.xml" rel="self"/>
+  <link href="http://warambil.github.io/"/>
+  <updated>2014-04-18T17:07:35-03:00</updated>
+  <id>http://warambil.github.io/</id>
+  <author>
+    <name><![CDATA[Wilman Arambillete]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Magento: File and Directory Permissions]]></title>
+    <link href="http://warambil.github.io/blog/2014/04/18/magento-file-and-directory-permissions/"/>
+    <updated>2014-04-18T17:02:19-03:00</updated>
+    <id>http://warambil.github.io/blog/2014/04/18/magento-file-and-directory-permissions</id>
+    <content type="html"><![CDATA[<p>Once you install Magento for the first time, you need to make sure files and directories hold the right set of permissions. We assume in this example that we are working on a CentOS platform and the httpd (owner and group) is apache. Then we must assign apache as owner and group of the web root where Magento resides. In our case this location is</p>
+
+<pre><code>/var/www/html/magento
+</code></pre>
+
+<p>Then we set the right permissions</p>
+
+<pre><code>cd /var/www/html
+sudo chown apache:apache magento -R 
+</code></pre>
+
+<p>Then, we go to the magento directory and run the following commands</p>
+
+<pre><code>cd magento
+sudo find . -type f -print -exec chmod 664 {} \;
+sudo find . -type d -print -exec chmod 775 {} \;
+chmod 550 mage
+sudo chmod o+w var app/etc
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
