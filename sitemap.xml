@@ -19,6 +19,10 @@
         <lastmod>2014-04-18T20:14:00-03:00</lastmod>
     </url>
     <url>
+        <loc>http://warambil.com/atom_search.xml</loc>
+        <lastmod>2013-04-09T16:57:12-03:00</lastmod>
+    </url>
+    <url>
         <loc>http://warambil.com/blog/archives/</loc>
         <lastmod>2014-04-18T22:58:39-03:00</lastmod>
     </url>
@@ -28,6 +32,10 @@
     </url>
     <url>
         <loc>http://warambil.com/robots.txt</loc>
+        <lastmod>2014-04-18T16:59:17-03:00</lastmod>
+    </url>
+    <url>
+        <loc>http://warambil.com/search.html</loc>
         <lastmod>2014-04-18T16:59:17-03:00</lastmod>
     </url>
 </urlset>

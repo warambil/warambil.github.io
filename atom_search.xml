@@ -14,7 +14,8 @@
 
   
   <entry>
-    <title type="html"><![CDATA[AWS: How to Setup a Basic LAMP Server on an EC2 Micro Instance]]></title>
+    <title type="html"><![CDATA[AWS: How to setup a basic LAMP server on an EC2 micro instance]]></title>
+    <summary><![CDATA[]]></summary>
     <link href="http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/"/>
     <updated>2014-04-18T21:05:00-03:00</updated>
     <id>http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server</id>
@@ -215,7 +216,8 @@ sudo chkconfig vsftpd on
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Magento: How to Add a New Tab and Section in the Backend]]></title>
+    <title type="html"><![CDATA[Magento: How to add a new tab and section in the backend]]></title>
+    <summary><![CDATA[]]></summary>
     <link href="http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/"/>
     <updated>2014-04-18T20:37:50-03:00</updated>
     <id>http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend</id>
@@ -330,6 +332,7 @@ This new ACL role must be embedded into the <em>config.xml</em> file as well.</p
   
   <entry>
     <title type="html"><![CDATA[Magento: File and Directory Permissions]]></title>
+    <summary><![CDATA[]]></summary>
     <link href="http://warambil.com/blog/2014/04/18/magento-file-and-directory-permissions/"/>
     <updated>2014-04-18T17:02:19-03:00</updated>
     <id>http://warambil.com/blog/2014/04/18/magento-file-and-directory-permissions</id>
