@@ -6,7 +6,7 @@ comments: true
 categories: AWS
 ---
 ## Objective
-These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought that I could save others time by publishing them.
+These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought I could save others time by publishing it.
 
 This list may clearly vary according to particular needs so feel free to include or rule out any package.
 

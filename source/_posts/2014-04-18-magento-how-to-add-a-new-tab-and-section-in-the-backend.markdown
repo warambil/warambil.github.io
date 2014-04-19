@@ -3,7 +3,7 @@ layout: post
 title: "Magento: How to add a new tab and section in the backend"
 date: 2014-04-18 20:37:50 -0300
 comments: true
-categories: 
+categories: Magento
 ---
 ## Objective
 
