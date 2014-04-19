@@ -4,7 +4,7 @@
   <title><![CDATA[Wilman Arambillete]]></title>
   <link href="http://warambil.github.io/atom.xml" rel="self"/>
   <link href="http://warambil.github.io/"/>
-  <updated>2014-04-18T17:07:35-03:00</updated>
+  <updated>2014-04-18T21:01:02-03:00</updated>
   <id>http://warambil.github.io/</id>
   <author>
     <name><![CDATA[Wilman Arambillete]]></name>
@@ -12,6 +12,120 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Magento: How to Add a New Tab and Section in the Backend]]></title>
+    <link href="http://warambil.github.io/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/"/>
+    <updated>2014-04-18T20:37:50-03:00</updated>
+    <id>http://warambil.github.io/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend</id>
+    <content type="html"><![CDATA[<h2>Objective</h2>
+
+<p>We are going to see step by step how to add a custom tab, section and group of fields in the Magento backend configuration area.</p>
+
+<p><img class="center" src="http://warambil.github.io/images/magento-backend-new-tab.png" width="231" height="79" title="Magento backend custom tab" alt="images">
+<img class="center" src="http://warambil.github.io/images/magento-backend-new-section.png" width="658" height="310" title="Magento backend custom section" alt="images"></p>
+
+<h2>Procedure</h2>
+
+<p>This post assumes you have already created a new module so we must edit the following configuration file:</p>
+
+<pre><code>/app/code/local/&lt;company&gt;/&lt;modulo&gt;/etc/config.xml
+</code></pre>
+
+<p>We must then add our custom <em>helper</em> like this:</p>
+
+<pre><code>&lt;config&gt;
+&lt;modules&gt;
+    &lt;LCS_Ebay&gt;
+        &lt;version&gt;0.1.0&lt;/version&gt;
+    &lt;/LCS_Ebay&gt;
+&lt;/modules&gt;
+&lt;global&gt;
+    &lt;helpers&gt;
+        &lt;ebay&gt;
+            &lt;class&gt;LCS_Ebay_Helper&lt;/class&gt;
+        &lt;/ebay&gt;
+    &lt;/helpers&gt;
+</code></pre>
+
+<p>In this example we are planning to create a new section, therefore it is mandatory to create a new ACL role to be able to access this URL from the backend.
+This new ACL role must be embedded into the <em>config.xml</em> file as well.</p>
+
+<pre><code>&lt;adminhtml&gt;
+    &lt;acl&gt;
+        &lt;resources&gt;
+            &lt;admin&gt;
+                &lt;children&gt;
+                    &lt;system&gt;
+                        &lt;children&gt;
+                            &lt;config&gt;
+                                &lt;children&gt;
+                                    &lt;ebay&gt;
+                                        &lt;title&gt;Ebay&lt;/title&gt;
+                                    &lt;/ebay&gt;
+                                &lt;/children&gt;
+                            &lt;/config&gt;
+                        &lt;/children&gt;
+                    &lt;/system&gt;
+                &lt;/children&gt;
+            &lt;/admin&gt;
+        &lt;/resources&gt;
+    &lt;/acl&gt;
+</code></pre>
+
+<p>Finally, we must edit this configuration file</p>
+
+<pre><code>/app/code/local/&lt;empresa&gt;/&lt;modulo&gt;/etc/system.xml
+</code></pre>
+
+<p>in order to create our custom tab, section and groups of custom fields.</p>
+
+<pre><code>&lt;?xmlversion="1.0"?&gt;
+&lt;config&gt;
+    &lt;tabs&gt;
+        &lt;ebay translate="label" module="ebay"&gt;
+            &lt;label&gt;Market Places&lt;/label&gt;
+            &lt;sort_order&gt;99999&lt;/sort_order&gt;
+        &lt;/ebay&gt;
+    &lt;/tabs&gt;
+    &lt;sections&gt;
+        &lt;ebay translate="label" module="ebay"&gt;
+            &lt;label&gt;Ebay&lt;/label&gt;
+            &lt;tab&gt;ebay&lt;/tab&gt;
+            &lt;frontend_type&gt;text&lt;/frontend_type&gt;
+            &lt;sort_order&gt;1000&lt;/sort_order&gt;
+            &lt;show_in_default&gt;1&lt;/show_in_default&gt;
+            &lt;show_in_website&gt;1&lt;/show_in_website&gt;
+            &lt;show_in_store&gt;1&lt;/show_in_store&gt;
+            &lt;groups&gt;
+                &lt;ebay translate="label" module="ebay"&gt;
+                    &lt;label&gt;API Credentials&lt;/label&gt;
+                    &lt;frontend_type&gt;text&lt;/frontend_type&gt;
+                    &lt;sort_order&gt;100&lt;/sort_order&gt;
+                    &lt;show_in_default&gt;1&lt;/show_in_default&gt;
+                    &lt;show_in_website&gt;1&lt;/show_in_website&gt;
+                    &lt;show_in_store&gt;1&lt;/show_in_store&gt;
+                    &lt;fields&gt;
+                        &lt;dev_id translate="label"&gt;
+                            &lt;label&gt;Dev Id&lt;/label&gt;
+                            &lt;frontend_type&gt;text&lt;/frontend_type&gt;
+                            &lt;validate&gt;required-entry&lt;/validate&gt;
+                            &lt;sort_order&gt;1&lt;/sort_order&gt;
+                            &lt;show_in_default&gt;1&lt;/show_in_default&gt;
+                            &lt;show_in_website&gt;1&lt;/show_in_website&gt;
+                            &lt;show_in_store&gt;1&lt;/show_in_store&gt;
+                        &lt;/dev_id&gt;
+                    &lt;/fields&gt;
+                &lt;/ebay&gt;
+            &lt;/groups&gt;
+        &lt;/ebay&gt;
+    &lt;/sections&gt;
+&lt;/config&gt;
+</code></pre>
+
+<p>For further information about every tag, please check the following <a href="http://www.magentocommerce.com/wiki/5_-_modules_and_development/admin/xml_structure_for_admin_configurations">link</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Magento: File and Directory Permissions]]></title>
