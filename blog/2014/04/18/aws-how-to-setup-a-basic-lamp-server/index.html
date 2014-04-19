@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Wilman Arambillete</title>
+  <title>AWS: How to Setup a Basic LAMP Server - Wilman Arambillete</title>
   <meta name="author" content="Wilman Arambillete">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://warambil.github.io">
+  <link rel="canonical" href="http://warambil.github.io/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Wilman Arambillete" type="application/atom+xml">
@@ -76,15 +76,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/">AWS: How to Setup a Basic LAMP Server</a></h1>
+      <h1 class="entry-title">AWS: How to Setup a Basic LAMP Server</h1>
     
     
       <p class="meta">
@@ -102,15 +99,15 @@
 
 <time datetime="2014-04-18T21:05:00-03:00" pubdate data-updated="true">Apr 18<span>th</span>, 2014</time>
         
-           | <a href="/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/#disqus_thread"
-             data-disqus-identifier="http://warambil.github.io/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/">Comments</a>
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://warambil.github.io">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h2>Objective</h2>
+<div class="entry-content"><h2>Objective</h2>
 
 <p>These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought that I could save others time by publishing them.</p>
 
@@ -304,20 +301,59 @@ sudo chkconfig vsftpd on
 <pre><code>sudo usermod -a -G apache ec2-user
 </code></pre>
 </div>
+
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">Wilman Arambillete</span></span>
+
+      
+
+
+
+
+
+
+
+
   
 
 
-    </article>
+<time datetime="2014-04-18T21:05:00-03:00" pubdate data-updated="true">Apr 18<span>th</span>, 2014</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
   
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://warambil.github.io/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/" data-via="warambil" data-counturl="http://warambil.github.io/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/" >Tweet</a>
+  
+  
+  
 </div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/" title="Previous Post: Magento: How to add a new tab and section in the backend">&laquo; Magento: How to add a new tab and section in the backend</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
 <aside class="sidebar">
   
     <section>
@@ -342,7 +378,7 @@ sudo chkconfig vsftpd on
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/warambil">@warambil</a> on GitHub
@@ -384,6 +420,7 @@ sudo chkconfig vsftpd on
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -398,7 +435,10 @@ sudo chkconfig vsftpd on
       var disqus_shortname = 'warambil';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://warambil.github.io/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/';
+        var disqus_url = 'http://warambil.github.io/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
