@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Wilman Arambillete]]></title>
-  <link href="http://warambil.github.io/atom.xml" rel="self"/>
-  <link href="http://warambil.github.io/"/>
-  <updated>2014-04-18T22:12:25-03:00</updated>
-  <id>http://warambil.github.io/</id>
+  <link href="http://warambil.com/atom.xml" rel="self"/>
+  <link href="http://warambil.com/"/>
+  <updated>2014-04-18T22:32:53-03:00</updated>
+  <id>http://warambil.com/</id>
   <author>
     <name><![CDATA[Wilman Arambillete]]></name>
     
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[AWS: How to Setup a Basic LAMP Server]]></title>
-    <link href="http://warambil.github.io/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/"/>
+    <title type="html"><![CDATA[AWS: How to Setup a Basic LAMP Server on an EC2 Micro Instance]]></title>
+    <link href="http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/"/>
     <updated>2014-04-18T21:05:00-03:00</updated>
-    <id>http://warambil.github.io/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server</id>
+    <id>http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server</id>
     <content type="html"><![CDATA[<h2>Objective</h2>
 
 <p>These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought that I could save others time by publishing them.</p>
@@ -216,15 +216,15 @@ sudo chkconfig vsftpd on
   
   <entry>
     <title type="html"><![CDATA[Magento: How to Add a New Tab and Section in the Backend]]></title>
-    <link href="http://warambil.github.io/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/"/>
+    <link href="http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/"/>
     <updated>2014-04-18T20:37:50-03:00</updated>
-    <id>http://warambil.github.io/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend</id>
+    <id>http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend</id>
     <content type="html"><![CDATA[<h2>Objective</h2>
 
 <p>We are going to see step by step how to add a custom tab, section and group of fields in the Magento backend configuration area.</p>
 
-<p><img class="center" src="http://warambil.github.io/images/magento-backend-new-tab.png" width="231" height="79" title="Magento backend custom tab" alt="images">
-<img class="center" src="http://warambil.github.io/images/magento-backend-new-section.png" width="658" height="310" title="Magento backend custom section" alt="images"></p>
+<p><img class="center" src="http://warambil.com/images/magento-backend-new-tab.png" width="231" height="79" title="Magento backend custom tab" alt="images">
+<img class="center" src="http://warambil.com/images/magento-backend-new-section.png" width="658" height="310" title="Magento backend custom section" alt="images"></p>
 
 <h2>Procedure</h2>
 
@@ -330,9 +330,9 @@ This new ACL role must be embedded into the <em>config.xml</em> file as well.</p
   
   <entry>
     <title type="html"><![CDATA[Magento: File and Directory Permissions]]></title>
-    <link href="http://warambil.github.io/blog/2014/04/18/magento-file-and-directory-permissions/"/>
+    <link href="http://warambil.com/blog/2014/04/18/magento-file-and-directory-permissions/"/>
     <updated>2014-04-18T17:02:19-03:00</updated>
-    <id>http://warambil.github.io/blog/2014/04/18/magento-file-and-directory-permissions</id>
+    <id>http://warambil.com/blog/2014/04/18/magento-file-and-directory-permissions</id>
     <content type="html"><![CDATA[<p>Once you install Magento for the first time, you need to make sure files and directories hold the right set of permissions. We assume in this example that we are working on a CentOS platform and the httpd (owner and group) is apache. Then we must assign apache as owner and group of the web root where Magento resides. In our case this location is</p>
 
 <pre><code>/var/www/html/magento
