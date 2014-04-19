@@ -4,7 +4,7 @@
   <title><![CDATA[Wilman Arambillete]]></title>
   <link href="http://warambil.com/atom.xml" rel="self"/>
   <link href="http://warambil.com/"/>
-  <updated>2014-04-19T00:29:55-03:00</updated>
+  <updated>2014-04-19T00:33:53-03:00</updated>
   <id>http://warambil.com/</id>
   <author>
     <name><![CDATA[Wilman Arambillete]]></name>
@@ -21,7 +21,7 @@
     <id>http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server</id>
     <content type="html"><![CDATA[<h2>Objective</h2>
 
-<p>These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought that I could save others time by publishing them.</p>
+<p>These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought I could save others time by publishing it.</p>
 
 <p>This list may clearly vary according to particular needs so feel free to include or rule out any package.</p>
 
