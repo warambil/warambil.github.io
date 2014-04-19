@@ -3,7 +3,7 @@ layout: post
 title: "AWS: How to setup a basic LAMP server on an EC2 micro instance"
 date: 2014-04-18 21:05:00 -0300
 comments: true
-categories: 
+categories: AWS
 ---
 ## Objective
 These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought that I could save others time by publishing them.
