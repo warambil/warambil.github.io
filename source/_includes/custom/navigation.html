@@ -3,3 +3,10 @@
   <li><a href="{{ root_url }}/blog/archives">Archives</a></li>
   <li><a href="{{ root_url }}/about">About</a></li>
 </ul>
+{% if site.tapir_token %}
+  <form method="get" action="{{ root_url }}/search.html">
+    <fieldset role="search">
+      <input class="search" name="query" type="text" placeholder="Search..." x-webkit-speech />
+    </fieldset>
+  </form>
+{% endif %}

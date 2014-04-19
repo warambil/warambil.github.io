@@ -18,6 +18,10 @@ date_format: "ordinal"
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
 subscribe_rss: /atom.xml
 subscribe_email:
+
+#Search Tapir
+tapir_token: 5351e2d94ceafd0200000006
+
 # RSS feeds can list your email address if you like
 email:
 
@@ -78,7 +82,7 @@ google_plus_one_size: medium
 
 # Google Plus Profile
 # Hidden: No visible button, just add author information to search results
-googleplus_user: +WilmanArambillete
+googleplus_user: 
 googleplus_hidden: false
 
 # Pinboard
