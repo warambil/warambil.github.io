@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "AWS: How to setup a basic LAMP server on an EC2 micro instance"
+title: "How to setup a basic LAMP server on an EC2 micro instance"
 date: 2014-04-18 21:05:00 -0300
 comments: true
 categories: AWS

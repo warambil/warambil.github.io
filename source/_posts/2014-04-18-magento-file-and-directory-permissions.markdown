@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Magento: File and Directory Permissions"
+title: "File and Directory Permissions"
 date: 2014-04-18 17:02:19 -0300
 comments: true
 categories: Magento
