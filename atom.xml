@@ -4,7 +4,7 @@
   <title><![CDATA[Wilman Arambillete]]></title>
   <link href="http://warambil.com/atom.xml" rel="self"/>
   <link href="http://warambil.com/"/>
-  <updated>2014-04-19T12:33:12-03:00</updated>
+  <updated>2014-04-19T14:21:56-03:00</updated>
   <id>http://warambil.com/</id>
   <author>
     <name><![CDATA[Wilman Arambillete]]></name>
@@ -14,25 +14,58 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Magento: How to Know if We Are at the Homepage]]></title>
-    <link href="http://warambil.com/blog/2014/04/19/magento-how-to-know-if-we-are-at-the-homepage/"/>
-    <updated>2014-04-19T12:28:08-03:00</updated>
-    <id>http://warambil.com/blog/2014/04/19/magento-how-to-know-if-we-are-at-the-homepage</id>
-    <content type="html"><![CDATA[<p>There are times when, from a certain template we need to know if we are at the home page. Assuming our home page has been defined at the CMS and it is called <em>home</em>, we could use this snippet:</p>
+    <title type="html"><![CDATA[Moving From Wordpress to Octopress]]></title>
+    <link href="http://warambil.com/blog/2014/04/19/moving-from-wordpress-to-octopress/"/>
+    <updated>2014-04-19T13:10:03-03:00</updated>
+    <id>http://warambil.com/blog/2014/04/19/moving-from-wordpress-to-octopress</id>
+    <content type="html"><![CDATA[<p>Sometimes we have the urge to change. We come to realize something is just not right for us and we want something different for our own good.
+This is ultimately what this is all about.</p>
 
-<pre><code> &lt;?php 
-    $page = Mage::app()-&gt;getFrontController()-&gt;getRequest()-&gt;getRouteName();
+<p>After having used <a href="http://wordpress.org">Wordpress</a> for many years and yet considering it a great blogging platform, I have finally moved to Octopress.</p>
 
-    if (($page == 'cms') &amp;&amp; Mage::getSingleton('cms/page')-&gt;getIdentifier() == 'home'){
-        $this-&gt;setColumnCount(4)
-    }
- ?&gt;
-</code></pre>
+<p>The objective of this post is to help readers to decide what they should choose, according to their profile.</p>
+
+<h2>What about Wordpress</h2>
+
+<p><a href="http://wordpress.org">Wordpress</a> is a complete blogging platform. It offers a cool dashboard with all sort of graphical widgets.
+It also has a lot (and I mean a lot) of all kind of plugins to add to your website.</p>
+
+<p>It is robust, reasonably fast, stable and in a nutshell it is an excellent platform. In fact, it is now considered a great CMS platform that most web developers and designers use extensively.</p>
+
+<p>The thing is, if you are reading this post is because you are uncertain if Wordpress is for you (which does not necessarily means that fulfills your expectations).</p>
+
+<p>Wordpress is for you if all you want is to open a cool admin dashboard, use a wysiwyg editor (Word style) and blog, not caring about any other technical stuff.
+If fact I must say that most of people fall under this category of users so for them Wordpress is just fine.</p>
+
+<h2>What about Octopress</h2>
+
+<p><a href="http://www.octopress.org">Octopres</a> is a framework for <a href="http://jekyllrb.com/">Jekyll</a>, which defines itself as simple, blog-aware, static site.</p>
+
+<p>In a nutshell, you download a bundle with a bunch of files (ruby + html + sass) that let you generate a new static blog site that you usually publish on <a href="https://github.com/">Github</a> and maintain as another github project.</p>
+
+<p>You don&rsquo;t have a dashboard or a nice admin area. You just use your favorite text editor (<a href="http://www.sublimetext.com/3">Sublime Text 3</a> is mine), write your post using a cool mark-up language called <a href="https://daringfireball.net/projects/markdown/">Markdown</a> and then publish it using a command line appplication from your terminal.</p>
+
+<p>Having said this, you may be thinking: &ldquo;This is just nuts! What is the advantage of this over Wordpress?&rdquo;.</p>
+
+<p>Well, most of the advantages are kind of nerdy and could be listed as follows:</p>
+
+<ol>
+<li>Performance. You obtain a plain static website. No database or backend scripting language is involved whatsoever.</li>
+<li>Simplicity. Here&rsquo;s where the KISS concept applies. You just download the platform, sets it up by completing parameters in a config file and start blogging.</li>
+<li>Extensibility. Although this is not as complete as Wordpress, you can have most of the tools you need, such as social networks, Google Analytics, Comments, Tags, Categories, and so on and so forth. There are a set of limited but very useful <a href="http://octopress.org/docs/blogging/plugins/">plugins</a> to use with Octopress.</li>
+</ol>
+
+
+<h2>To sum up</h2>
+
+<p>If you decide whether to use Wordpress or Octopress depends on your profile, your technical expertise and your needs.</p>
+
+<p>I must say Octopress and other static page blogs are mostly oriented to developers who prefer dealing with tools they use on a daily basis, such as  source code repositories, text editors and command line applications.</p>
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[AWS: How to Setup a Basic LAMP Server on an EC2 Micro Instance]]></title>
+    <title type="html"><![CDATA[How to Setup a Basic LAMP Server on an EC2 Micro Instance]]></title>
     <link href="http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/"/>
     <updated>2014-04-18T21:05:00-03:00</updated>
     <id>http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server</id>
@@ -233,7 +266,7 @@ sudo chkconfig vsftpd on
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Magento: How to Add a New Tab and Section in the Backend]]></title>
+    <title type="html"><![CDATA[How to Add a New Tab and Section in the Backend]]></title>
     <link href="http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/"/>
     <updated>2014-04-18T20:37:50-03:00</updated>
     <id>http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend</id>
@@ -347,7 +380,7 @@ This new ACL role must be embedded into the <em>config.xml</em> file as well.</p
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Magento: File and Directory Permissions]]></title>
+    <title type="html"><![CDATA[File and Directory Permissions]]></title>
     <link href="http://warambil.com/blog/2014/04/18/magento-file-and-directory-permissions/"/>
     <updated>2014-04-18T17:02:19-03:00</updated>
     <id>http://warambil.com/blog/2014/04/18/magento-file-and-directory-permissions</id>

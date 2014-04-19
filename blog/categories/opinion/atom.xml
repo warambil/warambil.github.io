@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Opinion | Wilman Arambillete]]></title>
+  <link href="http://warambil.com/blog/categories/opinion/atom.xml" rel="self"/>
+  <link href="http://warambil.com/"/>
+  <updated>2014-04-19T14:21:56-03:00</updated>
+  <id>http://warambil.com/</id>
+  <author>
+    <name><![CDATA[Wilman Arambillete]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Moving From Wordpress to Octopress]]></title>
+    <link href="http://warambil.com/blog/2014/04/19/moving-from-wordpress-to-octopress/"/>
+    <updated>2014-04-19T13:10:03-03:00</updated>
+    <id>http://warambil.com/blog/2014/04/19/moving-from-wordpress-to-octopress</id>
+    <content type="html"><![CDATA[<p>Sometimes we have the urge to change. We come to realize something is just not right for us and we want something different for our own good.
+This is ultimately what this is all about.</p>
+
+<p>After having used <a href="http://wordpress.org">Wordpress</a> for many years and yet considering it a great blogging platform, I have finally moved to Octopress.</p>
+
+<p>The objective of this post is to help readers to decide what they should choose, according to their profile.</p>
+
+<h2>What about Wordpress</h2>
+
+<p><a href="http://wordpress.org">Wordpress</a> is a complete blogging platform. It offers a cool dashboard with all sort of graphical widgets.
+It also has a lot (and I mean a lot) of all kind of plugins to add to your website.</p>
+
+<p>It is robust, reasonably fast, stable and in a nutshell it is an excellent platform. In fact, it is now considered a great CMS platform that most web developers and designers use extensively.</p>
+
+<p>The thing is, if you are reading this post is because you are uncertain if Wordpress is for you (which does not necessarily means that fulfills your expectations).</p>
+
+<p>Wordpress is for you if all you want is to open a cool admin dashboard, use a wysiwyg editor (Word style) and blog, not caring about any other technical stuff.
+If fact I must say that most of people fall under this category of users so for them Wordpress is just fine.</p>
+
+<h2>What about Octopress</h2>
+
+<p><a href="http://www.octopress.org">Octopres</a> is a framework for <a href="http://jekyllrb.com/">Jekyll</a>, which defines itself as simple, blog-aware, static site.</p>
+
+<p>In a nutshell, you download a bundle with a bunch of files (ruby + html + sass) that let you generate a new static blog site that you usually publish on <a href="https://github.com/">Github</a> and maintain as another github project.</p>
+
+<p>You don&rsquo;t have a dashboard or a nice admin area. You just use your favorite text editor (<a href="http://www.sublimetext.com/3">Sublime Text 3</a> is mine), write your post using a cool mark-up language called <a href="https://daringfireball.net/projects/markdown/">Markdown</a> and then publish it using a command line appplication from your terminal.</p>
+
+<p>Having said this, you may be thinking: &ldquo;This is just nuts! What is the advantage of this over Wordpress?&rdquo;.</p>
+
+<p>Well, most of the advantages are kind of nerdy and could be listed as follows:</p>
+
+<ol>
+<li>Performance. You obtain a plain static website. No database or backend scripting language is involved whatsoever.</li>
+<li>Simplicity. Here&rsquo;s where the KISS concept applies. You just download the platform, sets it up by completing parameters in a config file and start blogging.</li>
+<li>Extensibility. Although this is not as complete as Wordpress, you can have most of the tools you need, such as social networks, Google Analytics, Comments, Tags, Categories, and so on and so forth. There are a set of limited but very useful <a href="http://octopress.org/docs/blogging/plugins/">plugins</a> to use with Octopress.</li>
+</ol>
+
+
+<h2>To sum up</h2>
+
+<p>If you decide whether to use Wordpress or Octopress depends on your profile, your technical expertise and your needs.</p>
+
+<p>I must say Octopress and other static page blogs are mostly oriented to developers who prefer dealing with tools they use on a daily basis, such as  source code repositories, text editors and command line applications.</p>
+]]></content>
+  </entry>
+  
+</feed>

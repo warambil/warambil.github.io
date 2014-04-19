@@ -2,23 +2,21 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://warambil.com/blog/2014/04/18/magento-file-and-directory-permissions/</loc>
-        <lastmod>2014-04-18T17:07:25-03:00</lastmod>
+        <lastmod>2014-04-19T13:09:25-03:00</lastmod>
     </url>
     <url>
         <loc>
             http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/
         </loc>
-        <lastmod>2014-04-19T00:29:39-03:00</lastmod>
+        <lastmod>2014-04-19T13:09:34-03:00</lastmod>
     </url>
     <url>
         <loc>http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/</loc>
-        <lastmod>2014-04-19T00:33:47-03:00</lastmod>
+        <lastmod>2014-04-19T13:08:59-03:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://warambil.com/blog/2014/04/19/magento-how-to-know-if-we-are-at-the-homepage/
-        </loc>
-        <lastmod>2014-04-19T12:32:50-03:00</lastmod>
+        <loc>http://warambil.com/blog/2014/04/19/moving-from-wordpress-to-octopress/</loc>
+        <lastmod>2014-04-19T14:21:56-03:00</lastmod>
     </url>
     <url>
         <loc>http://warambil.com/about/</loc>
@@ -30,11 +28,11 @@
     </url>
     <url>
         <loc>http://warambil.com/blog/archives/</loc>
-        <lastmod>2014-04-19T12:32:50-03:00</lastmod>
+        <lastmod>2014-04-19T14:21:56-03:00</lastmod>
     </url>
     <url>
         <loc>http://warambil.com/</loc>
-        <lastmod>2014-04-19T12:32:50-03:00</lastmod>
+        <lastmod>2014-04-19T14:21:56-03:00</lastmod>
     </url>
     <url>
         <loc>http://warambil.com/robots.txt</loc>

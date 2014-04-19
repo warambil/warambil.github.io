@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AWS | Wilman Arambillete]]></title>
   <link href="http://warambil.com/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://warambil.com/"/>
-  <updated>2014-04-19T12:33:12-03:00</updated>
+  <updated>2014-04-19T14:21:56-03:00</updated>
   <id>http://warambil.com/</id>
   <author>
     <name><![CDATA[Wilman Arambillete]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[AWS: How to Setup a Basic LAMP Server on an EC2 Micro Instance]]></title>
+    <title type="html"><![CDATA[How to Setup a Basic LAMP Server on an EC2 Micro Instance]]></title>
     <link href="http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/"/>
     <updated>2014-04-18T21:05:00-03:00</updated>
     <id>http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server</id>
