@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Magento | Wilman Arambillete]]></title>
   <link href="http://warambil.com/blog/categories/magento/atom.xml" rel="self"/>
   <link href="http://warambil.com/"/>
-  <updated>2014-04-19T00:39:10-03:00</updated>
+  <updated>2014-04-19T12:33:12-03:00</updated>
   <id>http://warambil.com/</id>
   <author>
     <name><![CDATA[Wilman Arambillete]]></name>
@@ -12,6 +12,24 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Magento: How to Know if We Are at the Homepage]]></title>
+    <link href="http://warambil.com/blog/2014/04/19/magento-how-to-know-if-we-are-at-the-homepage/"/>
+    <updated>2014-04-19T12:28:08-03:00</updated>
+    <id>http://warambil.com/blog/2014/04/19/magento-how-to-know-if-we-are-at-the-homepage</id>
+    <content type="html"><![CDATA[<p>There are times when, from a certain template we need to know if we are at the home page. Assuming our home page has been defined at the CMS and it is called <em>home</em>, we could use this snippet:</p>
+
+<pre><code> &lt;?php 
+    $page = Mage::app()-&gt;getFrontController()-&gt;getRequest()-&gt;getRouteName();
+
+    if (($page == 'cms') &amp;&amp; Mage::getSingleton('cms/page')-&gt;getIdentifier() == 'home'){
+        $this-&gt;setColumnCount(4)
+    }
+ ?&gt;
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Magento: How to Add a New Tab and Section in the Backend]]></title>

@@ -9,7 +9,7 @@
   <meta name="author" content="Wilman Arambillete">
 
   
-  <meta name="description" content="Objective We are going to see step by step how to add a custom tab, section and group of fields in the Magento backend configuration area. Procedure &hellip;">
+  <meta name="description" content="Objective These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought I could save &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -83,7 +83,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/">Magento: How to Add a New Tab and Section in the Backend</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/">AWS: How to Setup a Basic LAMP Server on an EC2 Micro Instance</a></h1>
     
     
       <p class="meta">
@@ -99,10 +99,10 @@
   
 
 
-<time datetime="2014-04-18T20:37:50-03:00" pubdate data-updated="true">Apr 18<span>th</span>, 2014</time>
+<time datetime="2014-04-18T21:05:00-03:00" pubdate data-updated="true">Apr 18<span>th</span>, 2014</time>
         
-           | <a href="/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/#disqus_thread"
-             data-disqus-identifier="http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/">Comments</a>
+           | <a href="/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/#disqus_thread"
+             data-disqus-identifier="http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/">Comments</a>
         
       </p>
     
@@ -111,110 +111,197 @@
 
   <div class="entry-content"><h2>Objective</h2>
 
-<p>We are going to see step by step how to add a custom tab, section and group of fields in the Magento backend configuration area.</p>
+<p>These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought I could save others time by publishing it.</p>
 
-<p><img class="center" src="/images/magento-backend-new-tab.png" width="231" height="79" title="Magento backend custom tab" alt="images">
-<img class="center" src="/images/magento-backend-new-section.png" width="658" height="310" title="Magento backend custom section" alt="images"></p>
+<p>This list may clearly vary according to particular needs so feel free to include or rule out any package.</p>
+
+<h2>Main Packages</h2>
+
+<p>Apache, PHP, MySQL, FTP and APC cache</p>
 
 <h2>Procedure</h2>
 
-<p>This post assumes you have already created a new module so we must edit the following configuration file:</p>
+<p>From the AWS EC2 instance dashboard, go to Security Profile and open the following ports: 20, 21, 443, 25, 5000-6000, 23 and 80.</p>
 
-<pre><code>/app/code/local/&lt;company&gt;/&lt;modulo&gt;/etc/config.xml
+<p>Install PHP</p>
+
+<pre><code>sudo yum install php php-mcrypt php-mbstring php-gd php-xml php-mysql php-soap php-devel php-pear
 </code></pre>
 
-<p>We must then add our custom <em>helper</em> like this:</p>
+<p>Edit /etc/php.ini and adjust the memory limit and your timezone</p>
 
-<pre><code>&lt;config&gt;
-&lt;modules&gt;
-    &lt;LCS_Ebay&gt;
-        &lt;version&gt;0.1.0&lt;/version&gt;
-    &lt;/LCS_Ebay&gt;
-&lt;/modules&gt;
-&lt;global&gt;
-    &lt;helpers&gt;
-        &lt;ebay&gt;
-            &lt;class&gt;LCS_Ebay_Helper&lt;/class&gt;
-        &lt;/ebay&gt;
-    &lt;/helpers&gt;
+<pre><code>memory_limit = 512M
+date.timezone = 'America/New_York'
 </code></pre>
 
-<p>In this example we are planning to create a new section, therefore it is mandatory to create a new ACL role to be able to access this URL from the backend.
-This new ACL role must be embedded into the <em>config.xml</em> file as well.</p>
+<p>Install Apache</p>
 
-<pre><code>&lt;adminhtml&gt;
-    &lt;acl&gt;
-        &lt;resources&gt;
-            &lt;admin&gt;
-                &lt;children&gt;
-                    &lt;system&gt;
-                        &lt;children&gt;
-                            &lt;config&gt;
-                                &lt;children&gt;
-                                    &lt;ebay&gt;
-                                        &lt;title&gt;Ebay&lt;/title&gt;
-                                    &lt;/ebay&gt;
-                                &lt;/children&gt;
-                            &lt;/config&gt;
-                        &lt;/children&gt;
-                    &lt;/system&gt;
-                &lt;/children&gt;
-            &lt;/admin&gt;
-        &lt;/resources&gt;
-    &lt;/acl&gt;
+<pre><code>sudo yum install httpd httpd-devel 
+sudo service httpd start
+sudo chkconfig httpd on
 </code></pre>
 
-<p>Finally, we must edit this configuration file</p>
+<p>Configure your virtual access</p>
 
-<pre><code>/app/code/local/&lt;empresa&gt;/&lt;modulo&gt;/etc/system.xml
+<pre><code>sudo vim /etc/httpd/conf.d/&lt;your virtual server.conf&gt;
+
+&lt;VirtualHost *:80&gt;
+    ServerName domain.com
+    ServerAlias www.domain.com
+    DocumentRoot /var/www/html/domain
+    ErrorLog /var/log/httpd/domain_error.log
+    TransferLog /var/log/httpd/domain_access.log
+    LogLevel warn
+    DirectoryIndex index.html index.php
+
+    &lt;Directory /var/www/html/domain&gt;
+        Options FollowSymLinks
+        AllowOverride All
+    &lt;/Directory&gt;
+&lt;/VirtualHost&gt;
 </code></pre>
 
-<p>in order to create our custom tab, section and groups of custom fields.</p>
+<p><em>Important:</em> DNS settings are beyond the scope of this post</p>
 
-<pre><code>&lt;?xmlversion="1.0"?&gt;
-&lt;config&gt;
-    &lt;tabs&gt;
-        &lt;ebay translate="label" module="ebay"&gt;
-            &lt;label&gt;Market Places&lt;/label&gt;
-            &lt;sort_order&gt;99999&lt;/sort_order&gt;
-        &lt;/ebay&gt;
-    &lt;/tabs&gt;
-    &lt;sections&gt;
-        &lt;ebay translate="label" module="ebay"&gt;
-            &lt;label&gt;Ebay&lt;/label&gt;
-            &lt;tab&gt;ebay&lt;/tab&gt;
-            &lt;frontend_type&gt;text&lt;/frontend_type&gt;
-            &lt;sort_order&gt;1000&lt;/sort_order&gt;
-            &lt;show_in_default&gt;1&lt;/show_in_default&gt;
-            &lt;show_in_website&gt;1&lt;/show_in_website&gt;
-            &lt;show_in_store&gt;1&lt;/show_in_store&gt;
-            &lt;groups&gt;
-                &lt;ebay translate="label" module="ebay"&gt;
-                    &lt;label&gt;API Credentials&lt;/label&gt;
-                    &lt;frontend_type&gt;text&lt;/frontend_type&gt;
-                    &lt;sort_order&gt;100&lt;/sort_order&gt;
-                    &lt;show_in_default&gt;1&lt;/show_in_default&gt;
-                    &lt;show_in_website&gt;1&lt;/show_in_website&gt;
-                    &lt;show_in_store&gt;1&lt;/show_in_store&gt;
-                    &lt;fields&gt;
-                        &lt;dev_id translate="label"&gt;
-                            &lt;label&gt;Dev Id&lt;/label&gt;
-                            &lt;frontend_type&gt;text&lt;/frontend_type&gt;
-                            &lt;validate&gt;required-entry&lt;/validate&gt;
-                            &lt;sort_order&gt;1&lt;/sort_order&gt;
-                            &lt;show_in_default&gt;1&lt;/show_in_default&gt;
-                            &lt;show_in_website&gt;1&lt;/show_in_website&gt;
-                            &lt;show_in_store&gt;1&lt;/show_in_store&gt;
-                        &lt;/dev_id&gt;
-                    &lt;/fields&gt;
-                &lt;/ebay&gt;
-            &lt;/groups&gt;
-        &lt;/ebay&gt;
-    &lt;/sections&gt;
-&lt;/config&gt;
+<p>Install APC</p>
+
+<pre><code>sudo yum install gcc make pcre-devel 
+pecl install apc
 </code></pre>
 
-<p>For further information about every tag, please check the following <a href="http://www.magentocommerce.com/wiki/5_-_modules_and_development/admin/xml_structure_for_admin_configurations">link</a></p>
+<p>In order to enable the APC extension create</p>
+
+<pre><code>/etc/php.d/apc.ini
+</code></pre>
+
+<p>with the following content</p>
+
+<pre><code>extension=apc.so
+</code></pre>
+
+<p><em>Notice:</em> You will then need to edit the apc.ini file and add all the necessary APC configuration lines according to the configuration you need.</p>
+
+<p>Set the server time according to your location</p>
+
+<pre><code>sudo mv /etc/localtime /etc/localtime.bak
+sudo ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
+</code></pre>
+
+<p>Make sure to run the services you need (<em>i.e. httpd</em>) and set them to be loaded at startup.</p>
+
+<p>Install MySQL</p>
+
+<pre><code>sudo yum install mysql-server mysql
+sudo service mysqld start
+</code></pre>
+
+<p>Set MySQL root user and password and run suggested commands to secure your MySQL server.</p>
+
+<pre><code>/usr/bin/mysqladmin -u root password ‘new-password’
+/usr/bin/mysqladmin -u root -h ip-10-204-63-86 password ‘new-password’
+/usr/bin/mysql_secure_installation
+sudo chkconfig mysqld on
+</code></pre>
+
+<p><em>Important:</em> If you are running a Micro instance please make sure to create a swap area and follow <a href="http://www.prowebdev.us/2012/05/amazon-ec2-linux-micro-swap-space.html">these steps</a> to prevent MySQL server from crashing.</p>
+
+<p>Install FTP</p>
+
+<pre><code>sudo yum install vsftpd
+</code></pre>
+
+<p>Install the DB4 package</p>
+
+<pre><code>sudo yum install db4-utils
+</code></pre>
+
+<p>Create the list of virtual users</p>
+
+<pre><code>/etc/vsftpd/virtual-users.txt 
+</code></pre>
+
+<p>and add your users like this</p>
+
+<pre><code>username
+password
+username
+password
+</code></pre>
+
+<p>Create the DB4 database like this</p>
+
+<pre><code>db_load -T -t hash -f virtual-users.txt /etc/vsftpd/virtual-users.db
+</code></pre>
+
+<p>Create the PAM file</p>
+
+<pre><code>sudo vim /etc/pam.d/vsftpd-virtual
+</code></pre>
+
+<p>and add the following content</p>
+
+<pre><code>auth required pam_userdb.so db=/etc/vsftpd/virtual-users
+account required pam_userdb.so db=/etc/vsftpd/virtual-users
+</code></pre>
+
+<p>Make sure the reference name (virtual-users) matches the name you chose for your virtual users file.</p>
+
+<p>Create your configuration file</p>
+
+<pre><code>sudo vim /etc/vsftpd/vsftpd.conf
+</code></pre>
+
+<p>This is a configuration file as an example</p>
+
+<pre><code>anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+local_umask=022
+force_dot_files=YES
+listen_port=21
+listen=YES
+background=YES
+dirmessage_enable=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+xferlog_std_format=YES
+guest_enable=YES
+guest_username=apache
+local_root=/var/www
+pam_service_name=vsftpd-virtual
+guest_enable=YES
+userlist_enable=YES
+tcp_wrappers=YES
+pasv_enable=YES
+pasv_max_port=6000
+pasv_min_port=5000
+pasv_address=54.201.210.12
+virtual_use_local_privs=YES
+hide_ids=YES
+user_config_dir=/etc/vsftpd/vsftpd_user_conf
+</code></pre>
+
+<p><em>pasv_address</em> must be your instance public IP
+<em>pam_service_name</em> corresponds to the PAM file we have previously created
+<em>local_root</em> is the directory you will access when connecting via FTP
+<em>user_config_dir</em> is an optional directory with files named after virtual users, storing custom paths and/or settings.
+<em>pasv_max_port</em> and <em>pasv_min_port</em> are arbitrary ports that must be open otherwise there will be errors when transferring files.</p>
+
+<p>Make sure the apache user has read and write permissions on the web root directory.</p>
+
+<pre><code>chown apache:apache /var/www/html
+</code></pre>
+
+<p>Restart the service</p>
+
+<pre><code>sudo service vsftpd restart
+sudo chkconfig vsftpd on
+</code></pre>
+
+<p>Important: This is a plain FTP server. If you prefer to access your files using FTP clients over SSH, please make sure to give your <em>ec2-user</em> access to your web folder.</p>
+
+<pre><code>sudo usermod -a -G apache ec2-user
+</code></pre>
 </div>
   
   
@@ -239,6 +326,10 @@ This new ACL role must be embedded into the <em>config.xml</em> file as well.</p
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/19/magento-how-to-know-if-we-are-at-the-homepage/">Magento: How to Know if We Are at the Homepage</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/">AWS: How to Setup a Basic LAMP Server on an EC2 Micro Instance</a>
       </li>
     
@@ -254,7 +345,7 @@ This new ACL role must be embedded into the <em>config.xml</em> file as well.</p
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/aws/'>AWS (1)</a></li><li><a href='/blog/categories/magento/'>Magento (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/aws/'>AWS (1)</a></li><li><a href='/blog/categories/magento/'>Magento (3)</a></li></ul>
 </section>
 
 
