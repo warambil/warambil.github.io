@@ -4,6 +4,7 @@ title: "File and Directory Permissions"
 date: 2014-04-18 17:02:19 -0300
 comments: true
 categories: Magento
+published: false
 ---
 Once you install Magento for the first time, you need to make sure files and directories hold the right set of permissions. We assume in this example that we are working on a CentOS platform and the httpd (owner and group) is apache. Then we must assign apache as owner and group of the web root where Magento resides. In our case this location is
     
