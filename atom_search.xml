@@ -4,7 +4,7 @@
   <title><![CDATA[Wilman Arambillete]]></title>
   <link href="http://warambil.com/atom.xml" rel="self"/>
   <link href="http://warambil.com/"/>
-  <updated>2014-04-19T14:21:56-03:00</updated>
+  <updated>2014-04-20T23:51:19-03:00</updated>
   <id>http://warambil.com/</id>
   <author>
     <name><![CDATA[Wilman Arambillete]]></name>
@@ -12,6 +12,260 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[It is all about streams]]></title>
+    <summary><![CDATA[]]></summary>
+    <link href="http://warambil.com/blog/2014/04/20/it-is-all-about-streams/"/>
+    <updated>2014-04-20T12:27:30-03:00</updated>
+    <id>http://warambil.com/blog/2014/04/20/it-is-all-about-streams</id>
+    <content type="html"><![CDATA[<div class="embed-video-container"><iframe src="http://www.youtube.com/embed/aQyXeLSL0II "></iframe></div>
+
+
+<p>For Kramer it was all about <em>levels</em>, for us it is all about <em>streams</em>. I bumped into <a href="http://gulpjs.com/">Gulp.js</a> not so long ago, more specifically when I started working on a Yeoman generator project for my job.
+I needed to create a new generator to scaffold a Javascript ecommerce application we use, which was very hard to deploy.</p>
+
+<p>So I created this Yeoman generator and when I had to decide whether to use <a href="http://gruntjs.com/">Grunt.js</a> or Gulp, I tried them both but I felt in love with Gulp.js right away.</p>
+
+<p>For starters, Gulp concept is way more superior than Grunt, in terms of how tasks are being processed. In Grunt you just create regular tasks using javascript, which is cool but with Gulp gets the best out of node.js by using pure <em>streams</em>.</p>
+
+<p>And here&rsquo;s why I chose Kramer to start this post with, it is not about <em>levels</em> but about <em>streams</em>, although in a sense, even when pipes is a concept that comes from the old Unix world, it is not that easy to grasp.
+However, once you discover it, you&rsquo;ll want to do everything with pipes.</p>
+
+<h2>What are streams?</h2>
+
+<p>As we know, at the <a href="http://nodejs.org/">node.js</a> world, every interaction with disk and network involves passing callbacks to functions. When we think of reading and processing a file, we think of something like this:</p>
+
+<pre><code>var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, res) {
+    fs.readFile(__dirname + '/myfile.txt', function (err, data) {
+        res.end(data);
+    });
+});
+server.listen(8000);
+</code></pre>
+
+<p>This code implies that the whole file will have to be buffered into memory before it starts being sent to the client. This would be our first approach to solve this, however it is clearly not an ideal solution in terms of performance.</p>
+
+<p>However, Node.js provides us with a more efficient way to deal with this scenario: using something called streams. Let&rsquo;s take a look at this code:</p>
+
+<pre><code>var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, res) {
+    var stream = fs.createReadStream(__dirname + '/myfile.txt');
+    stream.pipe(res);
+});
+server.listen(8000);
+</code></pre>
+
+<p>In this example, we create a reader stream and it is the <em>pipe</em> function which takes care of listening and sending chunks of this file immediately after the file is read from the disk.</p>
+
+<p>Besides, the use of <em>pipe</em> provides us with an extra benefit, it handles buffering efficiently so no data will be sent to the client if the client is not ready to process it, (probably due to a slow connection network or high-latency issues).</p>
+
+<p>Now we can see streams are useful but how can we use them and most importantly, what can Gulp.js do for us?</p>
+
+<p>Let&rsquo;s take a brief tour on the streams node.js has to offer.</p>
+
+<p>Streams are connected using the pipe() function we have just seen, so just as it worked with Unix in the old days, chaining commands like this</p>
+
+<pre><code>ls | grep "setup_" | wc -l
+</code></pre>
+
+<p>works in node.js like this</p>
+
+<p>.pipe(task1)
+.pipe(task2)
+.pipe(task3)</p>
+
+<p><strong>FYI:</strong> What the previous Unix command does is to list the directory content, send the result to a grep command to filter those entries with the &ldquo;setup_&rdquo; pattern in their name and finally counting the resulting lines.</p>
+
+<h3>Types of streams</h3>
+
+<p>There are 5 types of streams: readable, writable, transform, duplex and classic but we are going to briefly cover just the first four ones in this post.</p>
+
+<h3>Readable</h3>
+
+<p>Readable streams create data that can be consumed by other streams like writable, transform or duplex streams.</p>
+
+<p>In order to create a readable stream we can do something like this:</p>
+
+<pre><code>var Readable = require('stream').Readable;
+var rs = new Readable;
+rs.push('hello ');
+rs.push('world\n');
+rs.push(null);
+rs.pipe(process.stdout);
+
+$ node myreadstream.js
+hello world
+</code></pre>
+
+<p>We define a readable stream, push some content ending with <em>null</em>, (which is very important since this is what triggers the <em>end</em> event) and finally we pipe the result to the next stream.
+In this case we use <em>process.stdout</em> to display the result directly to the console (standard output).</p>
+
+<p>In the previous example, we are pushing content directly but we could use the <em>_read</em> function to push chunks on-demand, which means only send data when the client asks for it.</p>
+
+<h3>Writable</h3>
+
+<p>This a stream for writing, which means you can <em>pipe</em> but you cannot use <em>src.pipe(writableStream)</em></p>
+
+<p>Let&rsquo;s see an example of it</p>
+
+<pre><code>var Writable = require('stream').Writable,
+
+var ws = Writable();
+ws._write = function(chunk, enc, next) {
+    var message = {
+        timestamp: new Date().getTime(),
+        message: chunk.toString('utf8')
+    }
+    console.dir(message);
+    next();
+};
+process.stdin.pipe(ws);
+
+echo "This is a log message" | node mywritestream.js
+</code></pre>
+
+<p>In this example we create a <em>Writer</em> stream that could be used as a logger. <em>Writer</em> streams use the <em>write</em> function which receives the following parameters:</p>
+
+<ul>
+<li>chunk = What the <em>Reader</em> stream sends</li>
+<li>encoding = Very important when using strings</li>
+<li>next(err) = It is the callback that tells the consumer that they can write more data. An optional <em>err</em> object parameter can be passed which emits an error event to the stream instance.</li>
+</ul>
+
+
+<h3>Transform</h3>
+
+<p>Transform streams better known as <em>through</em> streams are the ones that allow read and write data. They are mainly used to read data, transform it somehow and write it out.</p>
+
+<p>A good example could be a stream for reversing sentences.</p>
+
+<pre><code>var stream = require('stream'),
+    util = require('util');
+var Transform = stream.Transform;
+var Reverse = function(options) {
+    Transform.call(this, options);
+    this._reversedText = ''; 
+}
+util.inherits(Reverse, Transform);
+Reverse.prototype._transform = function(chunk, encoding, callback) {
+    var text = chunk.toString('utf8');
+    this._reversedText = text.split(' ').reverse().join(' ') + this._reversedText;
+    callback();
+}
+Reverse.prototype._flush = function(callback) {
+    this.push(this._reversedText, 'utf8');
+    callback();
+}
+
+//Here's how we use this stream
+var reverseStream = new Reverse();
+reverseStream.on('data', function(data) {
+    console.log(data.toString('utf8'));
+});
+reverseStream.write('Hello ');
+reverseStream.write('World ');
+reverseStream.end();
+</code></pre>
+
+<p>As we can see, we create a new Transform stream, declare a variable where we will store the modified text called: <em>_reversedText</em>.</p>
+
+<p>Finally, the <em>transform</em> function is where all the magic happens. We transform the data into a String format, split the text by spaces, reverse the array and join it back as a string with spaces.</p>
+
+<p>When the <em>flush</em> function is called the text is pushed.</p>
+
+<p>In order to try this, we create a new instance of our stream and data is sent to standard output upon receiving it, check the <em>on</em> event.</p>
+
+<h3>Duplex</h3>
+
+<p>These are special kind of <em>Transform</em> streams that allow bidirectional data flow.</p>
+
+<pre><code>a.pipe(b).pipe(a)
+</code></pre>
+
+<p>Chats are a good example when duplex streams could be used.</p>
+
+<h2>What about Gulp.js?</h2>
+
+<p>So far we have written about streams but how can we use those streams?.
+Truth be told, although it is really fun to play with streams, most of the times you will probably find yourself digging into <a href="https://www.npmjs.org/">npm</a> packages trying to find a gulp stream that solve your problems. And most of them times you will be successful at your search.</p>
+
+<h3>Installation</h3>
+
+<p>The first we have to do is to download <a href="http://gulpjs.com/">Gulp.js</a> and install it.</p>
+
+<pre><code>node install -g gulp 
+</code></pre>
+
+<h3>Tasks</h3>
+
+<p>Then, you have to create your <em>GulpFile.js</em> and start adding your tasks.</p>
+
+<p>In order to understand how tasks are defined, let&rsquo;s take a look at a GulpFile.js file.</p>
+
+<p>Firstly, you call the needed requires according to the packages you need. In this example, you will need <em>gulp-concat and gulp-uglify</em>.</p>
+
+<p><strong><em>Important</em></strong> Make sure to download these packages before using them.</p>
+
+<pre><code>npm install gulp-concat gulp-uglify
+</code></pre>
+
+<p>Then you can create your file like this</p>
+
+<pre><code>var gulp = require('gulp');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+</code></pre>
+
+<p>In Gulp you define an origin, which is a directory where all files to be processed reside. Filters and wildcards can be used here, so in this case we would like to process all js files in every directory within the client directory.</p>
+
+<pre><code>var paths = {
+  scripts: ['client/js/**/*.js']
+};
+</code></pre>
+
+<p>Then, we define our tasks and chain our streams. In this example, we create a task called <em>scripts</em>, process all js files, send them to uglify(), concat the result into a new file called <em>all.min.js</em> and finally store them at the <em>build/js</em> directory (which is automatically created if it does not exist).</p>
+
+<pre><code>gulp.task('scripts', function() {
+  // Minify and copy all JavaScript (except vendor scripts)
+  return gulp.src(paths.scripts)
+    .pipe(uglify())
+    .pipe(concat('all.min.js'))
+    .pipe(gulp.dest('build/js'));
+});
+</code></pre>
+
+<p>We can create as many tasks as we like.</p>
+
+<pre><code>// Another task
+gulp.task('another', function() {
+  ...
+});
+</code></pre>
+
+<p>Finally we could even create a task that depends on previous tasks. What it does is to execute all referenced tasks.</p>
+
+<pre><code>// The default task (called when you run `gulp` from cli)
+gulp.task('default', ['scripts', 'another']);
+</code></pre>
+
+<p><strong>Important: </strong> It is important to understand that in the last command, tasks are executed asynchronously, which means that <em>another</em> will not necessarily be executed <em>after</em> <em>scripts</em>. If we need to run dependent tasks in order, we must use another npm package called: <a href="https://www.npmjs.org/package/run-sequence">run-sequence</a>.</p>
+
+<p>As I said, once you start with Gulp, you will see how many useful apps are available at <a href="https://www.npmjs.org/">npm</a>.</p>
+
+<p>Last but not least, all you have to do to execute your tasks is this</p>
+
+<pre><code>gulp default
+</code></pre>
+
+<p>Pretty awesome uh?</p>
+
+<p>Happy coding!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Moving from Wordpress to Octopress]]></title>
@@ -263,149 +517,6 @@ sudo chkconfig vsftpd on
 <p>Important: This is a plain FTP server. If you prefer to access your files using FTP clients over SSH, please make sure to give your <em>ec2-user</em> access to your web folder.</p>
 
 <pre><code>sudo usermod -a -G apache ec2-user
-</code></pre>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to add a new tab and section in the backend]]></title>
-    <summary><![CDATA[]]></summary>
-    <link href="http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/"/>
-    <updated>2014-04-18T20:37:50-03:00</updated>
-    <id>http://warambil.com/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend</id>
-    <content type="html"><![CDATA[<h2>Objective</h2>
-
-<p>We are going to see step by step how to add a custom tab, section and group of fields in the Magento backend configuration area.</p>
-
-<p><img class="center" src="http://warambil.com/images/magento-backend-new-tab.png" width="231" height="79" title="Magento backend custom tab" alt="images">
-<img class="center" src="http://warambil.com/images/magento-backend-new-section.png" width="658" height="310" title="Magento backend custom section" alt="images"></p>
-
-<h2>Procedure</h2>
-
-<p>This post assumes you have already created a new module so we must edit the following configuration file:</p>
-
-<pre><code>/app/code/local/&lt;company&gt;/&lt;modulo&gt;/etc/config.xml
-</code></pre>
-
-<p>We must then add our custom <em>helper</em> like this:</p>
-
-<pre><code>&lt;config&gt;
-&lt;modules&gt;
-    &lt;LCS_Ebay&gt;
-        &lt;version&gt;0.1.0&lt;/version&gt;
-    &lt;/LCS_Ebay&gt;
-&lt;/modules&gt;
-&lt;global&gt;
-    &lt;helpers&gt;
-        &lt;ebay&gt;
-            &lt;class&gt;LCS_Ebay_Helper&lt;/class&gt;
-        &lt;/ebay&gt;
-    &lt;/helpers&gt;
-</code></pre>
-
-<p>In this example we are planning to create a new section, therefore it is mandatory to create a new ACL role to be able to access this URL from the backend.
-This new ACL role must be embedded into the <em>config.xml</em> file as well.</p>
-
-<pre><code>&lt;adminhtml&gt;
-    &lt;acl&gt;
-        &lt;resources&gt;
-            &lt;admin&gt;
-                &lt;children&gt;
-                    &lt;system&gt;
-                        &lt;children&gt;
-                            &lt;config&gt;
-                                &lt;children&gt;
-                                    &lt;ebay&gt;
-                                        &lt;title&gt;Ebay&lt;/title&gt;
-                                    &lt;/ebay&gt;
-                                &lt;/children&gt;
-                            &lt;/config&gt;
-                        &lt;/children&gt;
-                    &lt;/system&gt;
-                &lt;/children&gt;
-            &lt;/admin&gt;
-        &lt;/resources&gt;
-    &lt;/acl&gt;
-</code></pre>
-
-<p>Finally, we must edit this configuration file</p>
-
-<pre><code>/app/code/local/&lt;empresa&gt;/&lt;modulo&gt;/etc/system.xml
-</code></pre>
-
-<p>in order to create our custom tab, section and groups of custom fields.</p>
-
-<pre><code>&lt;?xmlversion="1.0"?&gt;
-&lt;config&gt;
-    &lt;tabs&gt;
-        &lt;ebay translate="label" module="ebay"&gt;
-            &lt;label&gt;Market Places&lt;/label&gt;
-            &lt;sort_order&gt;99999&lt;/sort_order&gt;
-        &lt;/ebay&gt;
-    &lt;/tabs&gt;
-    &lt;sections&gt;
-        &lt;ebay translate="label" module="ebay"&gt;
-            &lt;label&gt;Ebay&lt;/label&gt;
-            &lt;tab&gt;ebay&lt;/tab&gt;
-            &lt;frontend_type&gt;text&lt;/frontend_type&gt;
-            &lt;sort_order&gt;1000&lt;/sort_order&gt;
-            &lt;show_in_default&gt;1&lt;/show_in_default&gt;
-            &lt;show_in_website&gt;1&lt;/show_in_website&gt;
-            &lt;show_in_store&gt;1&lt;/show_in_store&gt;
-            &lt;groups&gt;
-                &lt;ebay translate="label" module="ebay"&gt;
-                    &lt;label&gt;API Credentials&lt;/label&gt;
-                    &lt;frontend_type&gt;text&lt;/frontend_type&gt;
-                    &lt;sort_order&gt;100&lt;/sort_order&gt;
-                    &lt;show_in_default&gt;1&lt;/show_in_default&gt;
-                    &lt;show_in_website&gt;1&lt;/show_in_website&gt;
-                    &lt;show_in_store&gt;1&lt;/show_in_store&gt;
-                    &lt;fields&gt;
-                        &lt;dev_id translate="label"&gt;
-                            &lt;label&gt;Dev Id&lt;/label&gt;
-                            &lt;frontend_type&gt;text&lt;/frontend_type&gt;
-                            &lt;validate&gt;required-entry&lt;/validate&gt;
-                            &lt;sort_order&gt;1&lt;/sort_order&gt;
-                            &lt;show_in_default&gt;1&lt;/show_in_default&gt;
-                            &lt;show_in_website&gt;1&lt;/show_in_website&gt;
-                            &lt;show_in_store&gt;1&lt;/show_in_store&gt;
-                        &lt;/dev_id&gt;
-                    &lt;/fields&gt;
-                &lt;/ebay&gt;
-            &lt;/groups&gt;
-        &lt;/ebay&gt;
-    &lt;/sections&gt;
-&lt;/config&gt;
-</code></pre>
-
-<p>For further information about every tag, please check the following <a href="http://www.magentocommerce.com/wiki/5_-_modules_and_development/admin/xml_structure_for_admin_configurations">link</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[File and Directory Permissions]]></title>
-    <summary><![CDATA[]]></summary>
-    <link href="http://warambil.com/blog/2014/04/18/magento-file-and-directory-permissions/"/>
-    <updated>2014-04-18T17:02:19-03:00</updated>
-    <id>http://warambil.com/blog/2014/04/18/magento-file-and-directory-permissions</id>
-    <content type="html"><![CDATA[<p>Once you install Magento for the first time, you need to make sure files and directories hold the right set of permissions. We assume in this example that we are working on a CentOS platform and the httpd (owner and group) is apache. Then we must assign apache as owner and group of the web root where Magento resides. In our case this location is</p>
-
-<pre><code>/var/www/html/magento
-</code></pre>
-
-<p>Then we set the right permissions</p>
-
-<pre><code>cd /var/www/html
-sudo chown apache:apache magento -R 
-</code></pre>
-
-<p>Then, we go to the magento directory and run the following commands</p>
-
-<pre><code>cd magento
-sudo find . -type f -print -exec chmod 664 {} \;
-sudo find . -type d -print -exec chmod 775 {} \;
-chmod 550 mage
-sudo chmod o+w var app/etc
 </code></pre>
 ]]></content>
   </entry>

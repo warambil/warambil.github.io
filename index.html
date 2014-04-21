@@ -9,8 +9,7 @@
   <meta name="author" content="Wilman Arambillete">
 
   
-  <meta name="description" content="Sometimes we have the urge to change. We come to realize something is just not right for us and we want something different for our own good.
-This is &hellip;">
+  <meta name="description" content="For Kramer it was all about levels, for us it is all about streams. I bumped into Gulp.js not so long ago, more specifically when I started working &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,7 +83,7 @@ This is &hellip;">
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/04/19/moving-from-wordpress-to-octopress/">Moving From Wordpress to Octopress</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/04/20/it-is-all-about-streams/">It Is All About Streams</a></h1>
     
     
       <p class="meta">
@@ -100,59 +99,261 @@ This is &hellip;">
   
 
 
-<time datetime="2014-04-19T13:10:03-03:00" pubdate data-updated="true">Apr 19<span>th</span>, 2014</time>
+<time datetime="2014-04-20T12:27:30-03:00" pubdate data-updated="true">Apr 20<span>th</span>, 2014</time>
         
-           | <a href="/blog/2014/04/19/moving-from-wordpress-to-octopress/#disqus_thread"
-             data-disqus-identifier="http://warambil.com/blog/2014/04/19/moving-from-wordpress-to-octopress/">Comments</a>
+           | <a href="/blog/2014/04/20/it-is-all-about-streams/#disqus_thread"
+             data-disqus-identifier="http://warambil.com/blog/2014/04/20/it-is-all-about-streams/">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Sometimes we have the urge to change. We come to realize something is just not right for us and we want something different for our own good.
-This is ultimately what this is all about.</p>
-
-<p>After having used <a href="http://wordpress.org">Wordpress</a> for many years and yet considering it a great blogging platform, I have finally moved to Octopress.</p>
-
-<p>The objective of this post is to help readers to decide what they should choose, according to their profile.</p>
-
-<h2>What about Wordpress</h2>
-
-<p><a href="http://wordpress.org">Wordpress</a> is a complete blogging platform. It offers a cool dashboard with all sort of graphical widgets.
-It also has a lot (and I mean a lot) of all kind of plugins to add to your website.</p>
-
-<p>It is robust, reasonably fast, stable and in a nutshell it is an excellent platform. In fact, it is now considered a great CMS platform that most web developers and designers use extensively.</p>
-
-<p>The thing is, if you are reading this post is because you are uncertain if Wordpress is for you (which does not necessarily means that fulfills your expectations).</p>
-
-<p>Wordpress is for you if all you want is to open a cool admin dashboard, use a wysiwyg editor (Word style) and blog, not caring about any other technical stuff.
-If fact I must say that most of people fall under this category of users so for them Wordpress is just fine.</p>
-
-<h2>What about Octopress</h2>
-
-<p><a href="http://www.octopress.org">Octopres</a> is a framework for <a href="http://jekyllrb.com/">Jekyll</a>, which defines itself as simple, blog-aware, static site.</p>
-
-<p>In a nutshell, you download a bundle with a bunch of files (ruby + html + sass) that let you generate a new static blog site that you usually publish on <a href="https://github.com/">Github</a> and maintain as another github project.</p>
-
-<p>You don&rsquo;t have a dashboard or a nice admin area. You just use your favorite text editor (<a href="http://www.sublimetext.com/3">Sublime Text 3</a> is mine), write your post using a cool mark-up language called <a href="https://daringfireball.net/projects/markdown/">Markdown</a> and then publish it using a command line appplication from your terminal.</p>
-
-<p>Having said this, you may be thinking: &ldquo;This is just nuts! What is the advantage of this over Wordpress?&rdquo;.</p>
-
-<p>Well, most of the advantages are kind of nerdy and could be listed as follows:</p>
-
-<ol>
-<li>Performance. You obtain a plain static website. No database or backend scripting language is involved whatsoever.</li>
-<li>Simplicity. Here&rsquo;s where the KISS concept applies. You just download the platform, sets it up by completing parameters in a config file and start blogging.</li>
-<li>Extensibility. Although this is not as complete as Wordpress, you can have most of the tools you need, such as social networks, Google Analytics, Comments, Tags, Categories, and so on and so forth. There are a set of limited but very useful <a href="http://octopress.org/docs/blogging/plugins/">plugins</a> to use with Octopress.</li>
-</ol>
+  <div class="entry-content"><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/aQyXeLSL0II "></iframe></div>
 
 
-<h2>To sum up</h2>
+<p>For Kramer it was all about <em>levels</em>, for us it is all about <em>streams</em>. I bumped into <a href="http://gulpjs.com/">Gulp.js</a> not so long ago, more specifically when I started working on a Yeoman generator project for my job.
+I needed to create a new generator to scaffold a Javascript ecommerce application we use, which was very hard to deploy.</p>
 
-<p>If you decide whether to use Wordpress or Octopress depends on your profile, your technical expertise and your needs.</p>
+<p>So I created this Yeoman generator and when I had to decide whether to use <a href="http://gruntjs.com/">Grunt.js</a> or Gulp, I tried them both but I felt in love with Gulp.js right away.</p>
 
-<p>I must say Octopress and other static page blogs are mostly oriented to developers who prefer dealing with tools they use on a daily basis, such as  source code repositories, text editors and command line applications.</p>
+<p>For starters, Gulp concept is way more superior than Grunt, in terms of how tasks are being processed. In Grunt you just create regular tasks using javascript, which is cool but with Gulp gets the best out of node.js by using pure <em>streams</em>.</p>
+
+<p>And here&rsquo;s why I chose Kramer to start this post with, it is not about <em>levels</em> but about <em>streams</em>, although in a sense, even when pipes is a concept that comes from the old Unix world, it is not that easy to grasp.
+However, once you discover it, you&rsquo;ll want to do everything with pipes.</p>
+
+<h2>What are streams?</h2>
+
+<p>As we know, at the <a href="http://nodejs.org/">node.js</a> world, every interaction with disk and network involves passing callbacks to functions. When we think of reading and processing a file, we think of something like this:</p>
+
+<pre><code>var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, res) {
+    fs.readFile(__dirname + '/myfile.txt', function (err, data) {
+        res.end(data);
+    });
+});
+server.listen(8000);
+</code></pre>
+
+<p>This code implies that the whole file will have to be buffered into memory before it starts being sent to the client. This would be our first approach to solve this, however it is clearly not an ideal solution in terms of performance.</p>
+
+<p>However, Node.js provides us with a more efficient way to deal with this scenario: using something called streams. Let&rsquo;s take a look at this code:</p>
+
+<pre><code>var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, res) {
+    var stream = fs.createReadStream(__dirname + '/myfile.txt');
+    stream.pipe(res);
+});
+server.listen(8000);
+</code></pre>
+
+<p>In this example, we create a reader stream and it is the <em>pipe</em> function which takes care of listening and sending chunks of this file immediately after the file is read from the disk.</p>
+
+<p>Besides, the use of <em>pipe</em> provides us with an extra benefit, it handles buffering efficiently so no data will be sent to the client if the client is not ready to process it, (probably due to a slow connection network or high-latency issues).</p>
+
+<p>Now we can see streams are useful but how can we use them and most importantly, what can Gulp.js do for us?</p>
+
+<p>Let&rsquo;s take a brief tour on the streams node.js has to offer.</p>
+
+<p>Streams are connected using the pipe() function we have just seen, so just as it worked with Unix in the old days, chaining commands like this</p>
+
+<pre><code>ls | grep "setup_" | wc -l
+</code></pre>
+
+<p>works in node.js like this</p>
+
+<p>.pipe(task1)
+.pipe(task2)
+.pipe(task3)</p>
+
+<p><strong>FYI:</strong> What the previous Unix command does is to list the directory content, send the result to a grep command to filter those entries with the &ldquo;setup_&rdquo; pattern in their name and finally counting the resulting lines.</p>
+
+<h3>Types of streams</h3>
+
+<p>There are 5 types of streams: readable, writable, transform, duplex and classic but we are going to briefly cover just the first four ones in this post.</p>
+
+<h3>Readable</h3>
+
+<p>Readable streams create data that can be consumed by other streams like writable, transform or duplex streams.</p>
+
+<p>In order to create a readable stream we can do something like this:</p>
+
+<pre><code>var Readable = require('stream').Readable;
+var rs = new Readable;
+rs.push('hello ');
+rs.push('world\n');
+rs.push(null);
+rs.pipe(process.stdout);
+
+$ node myreadstream.js
+hello world
+</code></pre>
+
+<p>We define a readable stream, push some content ending with <em>null</em>, (which is very important since this is what triggers the <em>end</em> event) and finally we pipe the result to the next stream.
+In this case we use <em>process.stdout</em> to display the result directly to the console (standard output).</p>
+
+<p>In the previous example, we are pushing content directly but we could use the <em>_read</em> function to push chunks on-demand, which means only send data when the client asks for it.</p>
+
+<h3>Writable</h3>
+
+<p>This a stream for writing, which means you can <em>pipe</em> but you cannot use <em>src.pipe(writableStream)</em></p>
+
+<p>Let&rsquo;s see an example of it</p>
+
+<pre><code>var Writable = require('stream').Writable,
+
+var ws = Writable();
+ws._write = function(chunk, enc, next) {
+    var message = {
+        timestamp: new Date().getTime(),
+        message: chunk.toString('utf8')
+    }
+    console.dir(message);
+    next();
+};
+process.stdin.pipe(ws);
+
+echo "This is a log message" | node mywritestream.js
+</code></pre>
+
+<p>In this example we create a <em>Writer</em> stream that could be used as a logger. <em>Writer</em> streams use the <em>write</em> function which receives the following parameters:</p>
+
+<ul>
+<li>chunk = What the <em>Reader</em> stream sends</li>
+<li>encoding = Very important when using strings</li>
+<li>next(err) = It is the callback that tells the consumer that they can write more data. An optional <em>err</em> object parameter can be passed which emits an error event to the stream instance.</li>
+</ul>
+
+
+<h3>Transform</h3>
+
+<p>Transform streams better known as <em>through</em> streams are the ones that allow read and write data. They are mainly used to read data, transform it somehow and write it out.</p>
+
+<p>A good example could be a stream for reversing sentences.</p>
+
+<pre><code>var stream = require('stream'),
+    util = require('util');
+var Transform = stream.Transform;
+var Reverse = function(options) {
+    Transform.call(this, options);
+    this._reversedText = ''; 
+}
+util.inherits(Reverse, Transform);
+Reverse.prototype._transform = function(chunk, encoding, callback) {
+    var text = chunk.toString('utf8');
+    this._reversedText = text.split(' ').reverse().join(' ') + this._reversedText;
+    callback();
+}
+Reverse.prototype._flush = function(callback) {
+    this.push(this._reversedText, 'utf8');
+    callback();
+}
+
+//Here's how we use this stream
+var reverseStream = new Reverse();
+reverseStream.on('data', function(data) {
+    console.log(data.toString('utf8'));
+});
+reverseStream.write('Hello ');
+reverseStream.write('World ');
+reverseStream.end();
+</code></pre>
+
+<p>As we can see, we create a new Transform stream, declare a variable where we will store the modified text called: <em>_reversedText</em>.</p>
+
+<p>Finally, the <em>transform</em> function is where all the magic happens. We transform the data into a String format, split the text by spaces, reverse the array and join it back as a string with spaces.</p>
+
+<p>When the <em>flush</em> function is called the text is pushed.</p>
+
+<p>In order to try this, we create a new instance of our stream and data is sent to standard output upon receiving it, check the <em>on</em> event.</p>
+
+<h3>Duplex</h3>
+
+<p>These are special kind of <em>Transform</em> streams that allow bidirectional data flow.</p>
+
+<pre><code>a.pipe(b).pipe(a)
+</code></pre>
+
+<p>Chats are a good example when duplex streams could be used.</p>
+
+<h2>What about Gulp.js?</h2>
+
+<p>So far we have written about streams but how can we use those streams?.
+Truth be told, although it is really fun to play with streams, most of the times you will probably find yourself digging into <a href="https://www.npmjs.org/">npm</a> packages trying to find a gulp stream that solve your problems. And most of them times you will be successful at your search.</p>
+
+<h3>Installation</h3>
+
+<p>The first we have to do is to download <a href="http://gulpjs.com/">Gulp.js</a> and install it.</p>
+
+<pre><code>node install -g gulp 
+</code></pre>
+
+<h3>Tasks</h3>
+
+<p>Then, you have to create your <em>GulpFile.js</em> and start adding your tasks.</p>
+
+<p>In order to understand how tasks are defined, let&rsquo;s take a look at a GulpFile.js file.</p>
+
+<p>Firstly, you call the needed requires according to the packages you need. In this example, you will need <em>gulp-concat and gulp-uglify</em>.</p>
+
+<p><strong><em>Important</em></strong> Make sure to download these packages before using them.</p>
+
+<pre><code>npm install gulp-concat gulp-uglify
+</code></pre>
+
+<p>Then you can create your file like this</p>
+
+<pre><code>var gulp = require('gulp');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+</code></pre>
+
+<p>In Gulp you define an origin, which is a directory where all files to be processed reside. Filters and wildcards can be used here, so in this case we would like to process all js files in every directory within the client directory.</p>
+
+<pre><code>var paths = {
+  scripts: ['client/js/**/*.js']
+};
+</code></pre>
+
+<p>Then, we define our tasks and chain our streams. In this example, we create a task called <em>scripts</em>, process all js files, send them to uglify(), concat the result into a new file called <em>all.min.js</em> and finally store them at the <em>build/js</em> directory (which is automatically created if it does not exist).</p>
+
+<pre><code>gulp.task('scripts', function() {
+  // Minify and copy all JavaScript (except vendor scripts)
+  return gulp.src(paths.scripts)
+    .pipe(uglify())
+    .pipe(concat('all.min.js'))
+    .pipe(gulp.dest('build/js'));
+});
+</code></pre>
+
+<p>We can create as many tasks as we like.</p>
+
+<pre><code>// Another task
+gulp.task('another', function() {
+  ...
+});
+</code></pre>
+
+<p>Finally we could even create a task that depends on previous tasks. What it does is to execute all referenced tasks.</p>
+
+<pre><code>// The default task (called when you run `gulp` from cli)
+gulp.task('default', ['scripts', 'another']);
+</code></pre>
+
+<p><strong>Important: </strong> It is important to understand that in the last command, tasks are executed asynchronously, which means that <em>another</em> will not necessarily be executed <em>after</em> <em>scripts</em>. If we need to run dependent tasks in order, we must use another npm package called: <a href="https://www.npmjs.org/package/run-sequence">run-sequence</a>.</p>
+
+<p>As I said, once you start with Gulp, you will see how many useful apps are available at <a href="https://www.npmjs.org/">npm</a>.</p>
+
+<p>Last but not least, all you have to do to execute your tasks is this</p>
+
+<pre><code>gulp default
+</code></pre>
+
+<p>Pretty awesome uh?</p>
+
+<p>Happy coding!</p>
 </div>
   
   
@@ -175,6 +376,10 @@ If fact I must say that most of people fall under this category of users so for 
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/20/it-is-all-about-streams/">It Is All About Streams</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/19/moving-from-wordpress-to-octopress/">Moving From Wordpress to Octopress</a>
       </li>
     
@@ -182,19 +387,11 @@ If fact I must say that most of people fall under this category of users so for 
         <a href="/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/">How to Setup a Basic LAMP Server on an EC2 Micro Instance</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/18/magento-how-to-add-a-new-tab-and-section-in-the-backend/">How to Add a New Tab and Section in the Backend</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/18/magento-file-and-directory-permissions/">File and Directory Permissions</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/aws/'>AWS (1)</a></li><li><a href='/blog/categories/magento/'>Magento (2)</a></li><li><a href='/blog/categories/opinion/'>Opinion (1)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/aws/'>AWS (1)</a></li><li><a href='/blog/categories/gulp-dot-js/'>Gulp.js (1)</a></li><li><a href='/blog/categories/node-dot-js/'>Node.js (1)</a></li><li><a href='/blog/categories/opinion/'>Opinion (1)</a></li></ul>
 </section>
 
 
