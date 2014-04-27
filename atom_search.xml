@@ -4,7 +4,7 @@
   <title><![CDATA[Wilman Arambillete]]></title>
   <link href="http://warambil.com/atom.xml" rel="self"/>
   <link href="http://warambil.com/"/>
-  <updated>2014-04-26T20:53:21-03:00</updated>
+  <updated>2014-04-27T02:14:41-03:00</updated>
   <id>http://warambil.com/</id>
   <author>
     <name><![CDATA[Wilman Arambillete]]></name>
@@ -12,6 +12,303 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Removing unused CSS]]></title>
+    <summary><![CDATA[]]></summary>
+    <link href="http://warambil.com/blog/2014/04/26/removing-unused-css/"/>
+    <updated>2014-04-26T21:25:26-03:00</updated>
+    <id>http://warambil.com/blog/2014/04/26/removing-unused-css</id>
+    <content type="html"><![CDATA[<p><img class="left" src="http://warambil.com/images/unused-css.png" width="400" title="unused-css" alt="images"></p>
+
+<p>It seems as if all web developers are lately aiming at reducing the size of the content delivered to the browser.</p>
+
+<p>It is in fact a big challenge and optimizing a web site content delivery might imply a great deal of tweaks and tricks to be successfully accomplished.</p>
+
+<p>Apache modules like <a href="http://www.modpagespeed.com">PageSpeed</a> are vital in this mission. PageSpeed improves web page latency by modifying the resources on the page. For example a set of filters are applied to perform tasks such as altering the HTML content, changing CSS and JS files references or simply making pages to point to more optimized images.</p>
+
+<p>Custom optimization strategies are applied to different assets in order to reduce the loading time. These ones involve inlining small resources, dynamically minifying JS and CSS files, and so on and so forth.</p>
+
+<p>These techniques can obviously be of great help but they are only the tip of the iceberg. Since we as developers have been starting using boilerplates with tools like Yeoman, we can build our own set of tools to automatically generate a better content before it is deployed to the web server.</p>
+
+<p>This means that we now have a great deal of <a href="https://www.npmjs.org/">npm</a> packages at our hands, ready to be piped with <a href="http://gulpjs.com/">Gulp.js</a> (<a href="http://warambil.com/blog/2014/04/20/it-is-all-about-streams/">please read my previous post about this</a>).</p>
+
+<p>When I first heard about <em>Uncss</em> techniques I must confess I did not grasp the real potential behind it. At first, I thought it was just about removing unused css from static HTML pages.</p>
+
+<p>I thought that using <a href="https://github.com/ben-eb/gulp-uncss">gulp-uncss</a> on static HTML files made no sense at all, specially considering that most of nowadays web sites are either server script generated pages or JavaScript SPAs (Single Page Applications).</p>
+
+<p>It was not until I found Giacomo Martino&rsquo;s project (<a href="https://github.com/giakki/uncss">Uncss</a>), that I could understand how awesome it is.</p>
+
+<p>In order to fully understand how it all works, we must first learn about other apps.</p>
+
+<h2><a href="http://phantomjs.org">PhantomJs</a></h2>
+
+<p>PhantomJs is <em>headless Webkit scriptable with a Javascript API</em>.
+In other words, it is a full stack webkit where you can render any website as if it were rendered by a regular browser.</p>
+
+<p>For instance, you might need to use it for</p>
+
+<ul>
+<li>Headless website testing</li>
+<li>Screen capturing</li>
+<li>Page automation</li>
+<li>Network monitoring</li>
+</ul>
+
+
+<p>Let&rsquo;s see a couple of examples taken from <a href="http://phantomjs.org/quick-start.html">their website</a>, to understand how it works.</p>
+
+<h3>Capture a web page</h3>
+
+<p>Create a very basic Javascript file named <em>Capture.js</em></p>
+
+<pre><code>var page = require('webpage').create();
+page.open('http://example.com', function() {
+  page.render('example.png');
+  phantom.exit();
+});        
+</code></pre>
+
+<p>Then, all we do is this</p>
+
+<pre><code>phantomjs Capture.js
+</code></pre>
+
+<p>That&rsquo;s it. This script opens the indicated URL and renders the whole content into an example.png file.</p>
+
+<h3>Page loading time measurement</h3>
+
+<p>Create a javascript file called <em>LoadSpeed.js</em></p>
+
+<pre><code>var page = require('webpage').create(),
+  system = require('system'),
+  t, address;
+if (system.args.length === 1) {
+  console.log('Usage: loadspeed.js &lt;some URL&gt;');
+  phantom.exit();
+}
+t = Date.now();
+address = system.args[1];
+page.open(address, function(status) {
+  if (status !== 'success') {
+    console.log('FAIL to load the address');
+  } else {
+    t = Date.now() - t;
+    console.log('Loading time ' + t + ' msec');
+  }
+  phantom.exit();
+});
+</code></pre>
+
+<p>Then, we must execute as follows</p>
+
+<pre><code>phantomjs loadspeed.js http://www.google.com
+</code></pre>
+
+<p>and we should obtain an output like this</p>
+
+<p><em>Loading <a href="http://www.google.com">http://www.google.com</a> Loading time 719 msec</em></p>
+
+<h2>So how does <a href="https://github.com/giakki/uncss">Uncss</a> work then?</h2>
+
+<p>Basically, <em>UnCSS</em> removes unused CSS from your stylesheets by performing the following tasks:</p>
+
+<ol>
+<li>PhantomJs loads HTML files and Javascript is executed</li>
+<li>It checks what styles are actually being used in every page</li>
+<li>A parser (css-parse) is applied to the concatenated bunch of css files</li>
+<li>All unused selectors are ruled out and an optimized resulting CSS file is created.</li>
+</ol>
+
+
+<p>UnCss is a node.js project and you could <a href="https://github.com/giakki/uncss">check its repository</a> if you would like to dive in and use it right away.</p>
+
+<p>However, we would like to go one step further.</p>
+
+<h2>gulp-uncss</h2>
+
+<p>This GulpJs task uses UnCss to parse a set of <em>HTML</em> files and an original <em>CSS</em> file in order to remove unused styles.</p>
+
+<p>As any other gulp npm package this one is installed as follows</p>
+
+<pre><code>npm install gulp-uncss --save-dev
+</code></pre>
+
+<p>Now, as usual we can pipe this task with the rest of our pre deployment tasks. I ran the following example against my Octopress blog.</p>
+
+<pre><code>var gulp = require('gulp');
+var uncss = require('gulp-uncss');
+var minifyCSS = require('gulp-minify-css');
+gulp.task('default', function() {
+    return gulp.src('/octopress/public/stylesheets/screen.css')
+        .pipe(uncss({
+            html: ['/octopress/public/index.html']
+        }))
+        .pipe(minifyCSS())
+        .pipe(gulp.dest('./out'));
+});
+</code></pre>
+
+<p>As you can see, I also added a <em>minify</em> task to the process so you could see that this task can be piped to any other GulpJs task.</p>
+
+<p>The overall process was very fast in this case and the original CSS file size was reduced from 38Kb to 12K.</p>
+
+<h2>Further considerations</h2>
+
+<p>The task execution time can be drastically incremented if files are obtained directly from an external site, so it is recommended to run this task together with the rest of the optimization tasks you usually run with GulpJs on your <em>/dist</em> directory, before your actual deployment.</p>
+
+<p>If you need to run it against external generated HTML files, you should better previously save those files using PhantomJs and run the task locally (adding the local CSS file).</p>
+
+<h2>Final thoughts</h2>
+
+<p>After digging into all these techniques, I feel more and more confident that GulpJs and node streams are the way to go as part of the development process.</p>
+
+<p><a href="http://yeoman.io/">Yeoman</a> has proven to be a core foundation for our web projects and <a href="http://gulpjs.com/">Gulp.js</a> is a <em>must</em> for batch tasks.</p>
+
+<p>More GulpJs apps are being created everyday and we can easily add them to our GulpFile.js file in order to get a truly optimized bundle before deployment.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Removing Unused Css]]></title>
+    <summary><![CDATA[]]></summary>
+    <link href="http://warambil.com/blog/2014/04/26/removing-unused-css/"/>
+    <updated>2014-04-26T00:00:00-03:00</updated>
+    <id>http://warambil.com/blog/2014/04/26/removing-unused-css</id>
+    <content type="html"><![CDATA[<!DOCTYPE html><html><head><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+
+body{
+  color:#444;
+  font-family:Georgia, Palatino, &#8216;Palatino Linotype&#8217;, Times, &#8216;Times New Roman&#8217;,
+              &#8220;Hiragino Sans GB&#8221;, &#8220;STXihei&#8221;, &#8220;微软雅黑&#8221;, serif;
+  font-size:12px;
+  line-height:1.5em;
+  background:#fefefe;
+  width: 45em;
+  margin: 10px auto;
+  padding: 1em;
+  outline: 1300px solid #FAFAFA;
+}
+
+a{ color: #0645ad; text-decoration:none;}
+a:visited{ color: #0b0080; }
+a:hover{ color: #06e; }
+a:active{ color:#faa700; }
+a:focus{ outline: thin dotted; }
+a:hover, a:active{ outline: 0; }
+
+span.backtick {
+  border:1px solid #EAEAEA;
+  border-radius:3px;
+  background:#F8F8F8;
+  padding:0 3px 0 3px;
+}
+
+::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
+::selection{background:rgba(255,255,0,0.3);color:#000}
+
+a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
+a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
+
+p{
+margin:1em 0;
+}
+
+img{
+max-width:100%;
+}
+
+h1,h2,h3,h4,h5,h6{
+font-weight:normal;
+color:#111;
+line-height:1em;
+}
+h4,h5,h6{ font-weight: bold; }
+h1{ font-size:2.5em; }
+h2{ font-size:2em; border-bottom:1px solid silver; padding-bottom: 5px; }
+h3{ font-size:1.5em; }
+h4{ font-size:1.2em; }
+h5{ font-size:1em; }
+h6{ font-size:0.9em; }
+
+blockquote{
+color:#666666;
+margin:0;
+padding-left: 3em;
+border-left: 0.5em #EEE solid;
+}
+hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
+
+
+pre , code, kbd, samp { 
+  color: #000; 
+  font-family: monospace; 
+  font-size: 0.88em; 
+  border-radius:3px;
+  background-color: #F8F8F8;
+  border: 1px solid #CCC; 
+}
+pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 5px 12px;}
+pre code { border: 0px !important; padding: 0;}
+code { padding: 0 3px 0 3px; }
+
+b, strong { font-weight: bold; }
+
+dfn { font-style: italic; }
+
+ins { background: #ff9; color: #000; text-decoration: none; }
+
+mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+
+sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+
+ul, ol { margin: 1em 0; padding: 0 0 0 2em; }
+li p:last-child { margin:0 }
+dd { margin: 0 0 0 2em; }
+
+img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+
+table { border-collapse: collapse; border-spacing: 0; }
+td { vertical-align: top; }
+
+@media only screen and (min-width: 480px) {
+body{font-size:14px;}
+}
+
+@media only screen and (min-width: 768px) {
+body{font-size:16px;}
+}
+
+@media print {
+  * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
+  body{font-size:12pt; max-width:100%; outline:none;}
+  a, a:visited { text-decoration: underline; }
+  hr { height: 1px; border:0; border-bottom:1px solid black; }
+  a[href]:after { content: &#8221; (&#8221; attr(href) &#8220;)&#8221;; }
+  abbr[title]:after { content: &#8221; (&#8221; attr(title) &#8220;)&#8221;; }
+  .ir a:after, a[href^=&#8221;javascript:&#8221;]:after, a[href^=&#8221;#&#8221;]:after { content: &#8220;&#8221;; }
+  pre, blockquote { border: 1px solid #999; padding-right: 1em; page-break-inside: avoid; }
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page :left { margin: 15mm 20mm 15mm 10mm; }
+  @page :right { margin: 15mm 10mm 15mm 20mm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
+</style><title>2014-04-26-removing-unused-css</title></head><body><hr />
+<p>layout: post
+title: &#8220;Removing unused CSS&#8221;
+date: 2014-04-26 21:25:26 -0300
+comments: true
+categories: [Css, Node.js]</p>
+<hr />
+<p><img class="left" src="http://warambil.com/images/unused-css.png" width="400" title="unused-css" alt="images"></p>
+<p>It seems as if all web developers are lately aiming at reducing the size of the content delivered to the browser.
+It is in fact a big challenge and optimizing a web site content delivery might imply a great deal of tweaks and tricks to successfully accomplish it.</p>
+<p>Mod_pagespeed Apache module </p></body></html>]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[It is all about streams]]></title>

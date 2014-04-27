@@ -9,7 +9,7 @@
   <meta name="author" content="Wilman Arambillete">
 
   
-  <meta name="description" content="Objective These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought I could save &hellip;">
+  <meta name="description" content="For Kramer it was all about levels, for us it is all about streams. I bumped into Gulp.js not so long ago, more specifically when I started working &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,7 +84,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/">How to Setup a Basic LAMP Server on an EC2 Micro Instance</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/04/20/it-is-all-about-streams/">It Is All About Streams</a></h1>
     
     
       <p class="meta">
@@ -100,209 +100,261 @@
   
 
 
-<time datetime="2014-04-18T21:05:00-03:00" pubdate data-updated="true">Apr 18<span>th</span>, 2014</time>
+<time datetime="2014-04-20T12:27:30-03:00" pubdate data-updated="true">Apr 20<span>th</span>, 2014</time>
         
-           | <a href="/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/#disqus_thread"
-             data-disqus-identifier="http://warambil.com/blog/2014/04/18/aws-how-to-setup-a-basic-lamp-server/">Comments</a>
+           | <a href="/blog/2014/04/20/it-is-all-about-streams/#disqus_thread"
+             data-disqus-identifier="http://warambil.com/blog/2014/04/20/it-is-all-about-streams/">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><h2>Objective</h2>
+  <div class="entry-content"><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/aQyXeLSL0II "></iframe></div>
 
-<p>These are the Yum packages I usually install on an EC2 instance with CentOS. I have done this so many times that I thought I could save others time by publishing it.</p>
 
-<p>This list may clearly vary according to particular needs so feel free to include or rule out any package.</p>
+<p>For Kramer it was all about <em>levels</em>, for us it is all about <em>streams</em>. I bumped into <a href="http://gulpjs.com/">Gulp.js</a> not so long ago, more specifically when I started working on a Yeoman generator project for my job.
+I needed to create a new generator to scaffold a Javascript ecommerce application we use, which was very hard to deploy.</p>
 
-<h2>Main Packages</h2>
+<p>So I created this Yeoman generator and when I had to decide whether to use <a href="http://gruntjs.com/">Grunt.js</a> or Gulp, I tried them both but I felt in love with Gulp.js right away.</p>
 
-<p>Apache, PHP, MySQL, FTP and APC cache</p>
+<p>For starters, Gulp concept is way more superior than Grunt, in terms of how tasks are being processed. In Grunt you just create regular tasks using javascript, which is cool but with Gulp gets the best out of node.js by using pure <em>streams</em>.</p>
 
-<h2>Procedure</h2>
+<p>And here&rsquo;s why I chose Kramer to start this post with, it is not about <em>levels</em> but about <em>streams</em>, although in a sense, even when pipes is a concept that comes from the old Unix world, it is not that easy to grasp.
+However, once you discover it, you&rsquo;ll want to do everything with pipes.</p>
 
-<p>From the AWS EC2 instance dashboard, go to Security Profile and open the following ports: 20, 21, 443, 25, 5000-6000, 23 and 80.</p>
+<h2>What are streams?</h2>
 
-<p>Install PHP</p>
+<p>As we know, at the <a href="http://nodejs.org/">node.js</a> world, every interaction with disk and network involves passing callbacks to functions. When we think of reading and processing a file, we think of something like this:</p>
 
-<pre><code>sudo yum install php php-mcrypt php-mbstring php-gd php-xml php-mysql php-soap php-devel php-pear
+<pre><code>var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, res) {
+    fs.readFile(__dirname + '/myfile.txt', function (err, data) {
+        res.end(data);
+    });
+});
+server.listen(8000);
 </code></pre>
 
-<p>Edit /etc/php.ini and adjust the memory limit and your timezone</p>
+<p>This code implies that the whole file will have to be buffered into memory before it starts being sent to the client. This would be our first approach to solve this, however it is clearly not an ideal solution in terms of performance.</p>
 
-<pre><code>memory_limit = 512M
-date.timezone = 'America/New_York'
+<p>However, Node.js provides us with a more efficient way to deal with this scenario: using something called streams. Let&rsquo;s take a look at this code:</p>
+
+<pre><code>var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, res) {
+    var stream = fs.createReadStream(__dirname + '/myfile.txt');
+    stream.pipe(res);
+});
+server.listen(8000);
 </code></pre>
 
-<p>Install Apache</p>
+<p>In this example, we create a reader stream and it is the <em>pipe</em> function which takes care of listening and sending chunks of this file immediately after the file is read from the disk.</p>
 
-<pre><code>sudo yum install httpd httpd-devel 
-sudo service httpd start
-sudo chkconfig httpd on
+<p>Besides, the use of <em>pipe</em> provides us with an extra benefit, it handles buffering efficiently so no data will be sent to the client if the client is not ready to process it, (probably due to a slow connection network or high-latency issues).</p>
+
+<p>Now we can see streams are useful but how can we use them and most importantly, what can Gulp.js do for us?</p>
+
+<p>Let&rsquo;s take a brief tour on the streams node.js has to offer.</p>
+
+<p>Streams are connected using the pipe() function we have just seen, so just as it worked with Unix in the old days, chaining commands like this</p>
+
+<pre><code>ls | grep "setup_" | wc -l
 </code></pre>
 
-<p>Configure your virtual access</p>
+<p>works in node.js like this</p>
 
-<pre><code>sudo vim /etc/httpd/conf.d/&lt;your virtual server.conf&gt;
+<p>.pipe(task1)
+.pipe(task2)
+.pipe(task3)</p>
 
-&lt;VirtualHost *:80&gt;
-    ServerName domain.com
-    ServerAlias www.domain.com
-    DocumentRoot /var/www/html/domain
-    ErrorLog /var/log/httpd/domain_error.log
-    TransferLog /var/log/httpd/domain_access.log
-    LogLevel warn
-    DirectoryIndex index.html index.php
+<p><strong>FYI:</strong> What the previous Unix command does is to list the directory content, send the result to a grep command to filter those entries with the &ldquo;setup_&rdquo; pattern in their name and finally counting the resulting lines.</p>
 
-    &lt;Directory /var/www/html/domain&gt;
-        Options FollowSymLinks
-        AllowOverride All
-    &lt;/Directory&gt;
-&lt;/VirtualHost&gt;
+<h3>Types of streams</h3>
+
+<p>There are 5 types of streams: readable, writable, transform, duplex and classic but we are going to briefly cover just the first four ones in this post.</p>
+
+<h3>Readable</h3>
+
+<p>Readable streams create data that can be consumed by other streams like writable, transform or duplex streams.</p>
+
+<p>In order to create a readable stream we can do something like this:</p>
+
+<pre><code>var Readable = require('stream').Readable;
+var rs = new Readable;
+rs.push('hello ');
+rs.push('world\n');
+rs.push(null);
+rs.pipe(process.stdout);
+
+$ node myreadstream.js
+hello world
 </code></pre>
 
-<p><em>Important:</em> DNS settings are beyond the scope of this post</p>
+<p>We define a readable stream, push some content ending with <em>null</em>, (which is very important since this is what triggers the <em>end</em> event) and finally we pipe the result to the next stream.
+In this case we use <em>process.stdout</em> to display the result directly to the console (standard output).</p>
 
-<p>Install APC</p>
+<p>In the previous example, we are pushing content directly but we could use the <em>_read</em> function to push chunks on-demand, which means only send data when the client asks for it.</p>
 
-<pre><code>sudo yum install gcc make pcre-devel 
-pecl install apc
+<h3>Writable</h3>
+
+<p>This a stream for writing, which means you can <em>pipe</em> but you cannot use <em>src.pipe(writableStream)</em></p>
+
+<p>Let&rsquo;s see an example of it</p>
+
+<pre><code>var Writable = require('stream').Writable,
+
+var ws = Writable();
+ws._write = function(chunk, enc, next) {
+    var message = {
+        timestamp: new Date().getTime(),
+        message: chunk.toString('utf8')
+    }
+    console.dir(message);
+    next();
+};
+process.stdin.pipe(ws);
+
+echo "This is a log message" | node mywritestream.js
 </code></pre>
 
-<p>In order to enable the APC extension create</p>
+<p>In this example we create a <em>Writer</em> stream that could be used as a logger. <em>Writer</em> streams use the <em>write</em> function which receives the following parameters:</p>
 
-<pre><code>/etc/php.d/apc.ini
+<ul>
+<li>chunk = What the <em>Reader</em> stream sends</li>
+<li>encoding = Very important when using strings</li>
+<li>next(err) = It is the callback that tells the consumer that they can write more data. An optional <em>err</em> object parameter can be passed which emits an error event to the stream instance.</li>
+</ul>
+
+
+<h3>Transform</h3>
+
+<p>Transform streams better known as <em>through</em> streams are the ones that allow read and write data. They are mainly used to read data, transform it somehow and write it out.</p>
+
+<p>A good example could be a stream for reversing sentences.</p>
+
+<pre><code>var stream = require('stream'),
+    util = require('util');
+var Transform = stream.Transform;
+var Reverse = function(options) {
+    Transform.call(this, options);
+    this._reversedText = ''; 
+}
+util.inherits(Reverse, Transform);
+Reverse.prototype._transform = function(chunk, encoding, callback) {
+    var text = chunk.toString('utf8');
+    this._reversedText = text.split(' ').reverse().join(' ') + this._reversedText;
+    callback();
+}
+Reverse.prototype._flush = function(callback) {
+    this.push(this._reversedText, 'utf8');
+    callback();
+}
+
+//Here's how we use this stream
+var reverseStream = new Reverse();
+reverseStream.on('data', function(data) {
+    console.log(data.toString('utf8'));
+});
+reverseStream.write('Hello ');
+reverseStream.write('World ');
+reverseStream.end();
 </code></pre>
 
-<p>with the following content</p>
+<p>As we can see, we create a new Transform stream, declare a variable where we will store the modified text called: <em>_reversedText</em>.</p>
 
-<pre><code>extension=apc.so
+<p>Finally, the <em>transform</em> function is where all the magic happens. We transform the data into a String format, split the text by spaces, reverse the array and join it back as a string with spaces.</p>
+
+<p>When the <em>flush</em> function is called the text is pushed.</p>
+
+<p>In order to try this, we create a new instance of our stream and data is sent to standard output upon receiving it, check the <em>on</em> event.</p>
+
+<h3>Duplex</h3>
+
+<p>These are special kind of <em>Transform</em> streams that allow bidirectional data flow.</p>
+
+<pre><code>a.pipe(b).pipe(a)
 </code></pre>
 
-<p><em>Notice:</em> You will then need to edit the apc.ini file and add all the necessary APC configuration lines according to the configuration you need.</p>
+<p>Chats are a good example when duplex streams could be used.</p>
 
-<p>Set the server time according to your location</p>
+<h2>What about Gulp.js?</h2>
 
-<pre><code>sudo mv /etc/localtime /etc/localtime.bak
-sudo ln -s /usr/share/zoneinfo/America/New_York /etc/localtime
+<p>So far we have written about streams but how can we use those streams?.
+Truth be told, although it is really fun to play with streams, most of the times you will probably find yourself digging into <a href="https://www.npmjs.org/">npm</a> packages trying to find a gulp stream that solve your problems. And most of them times you will be successful at your search.</p>
+
+<h3>Installation</h3>
+
+<p>The first we have to do is to download <a href="http://gulpjs.com/">Gulp.js</a> and install it.</p>
+
+<pre><code>node install -g gulp 
 </code></pre>
 
-<p>Make sure to run the services you need (<em>i.e. httpd</em>) and set them to be loaded at startup.</p>
+<h3>Tasks</h3>
 
-<p>Install MySQL</p>
+<p>Then, you have to create your <em>GulpFile.js</em> and start adding your tasks.</p>
 
-<pre><code>sudo yum install mysql-server mysql
-sudo service mysqld start
+<p>In order to understand how tasks are defined, let&rsquo;s take a look at a GulpFile.js file.</p>
+
+<p>Firstly, you call the needed requires according to the packages you need. In this example, you will need <em>gulp-concat and gulp-uglify</em>.</p>
+
+<p><strong><em>Important</em></strong> Make sure to download these packages before using them.</p>
+
+<pre><code>npm install gulp-concat gulp-uglify
 </code></pre>
 
-<p>Set MySQL root user and password and run suggested commands to secure your MySQL server.</p>
+<p>Then you can create your file like this</p>
 
-<pre><code>/usr/bin/mysqladmin -u root password ‘new-password’
-/usr/bin/mysqladmin -u root -h ip-10-204-63-86 password ‘new-password’
-/usr/bin/mysql_secure_installation
-sudo chkconfig mysqld on
+<pre><code>var gulp = require('gulp');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
 </code></pre>
 
-<p><em>Important:</em> If you are running a Micro instance please make sure to create a swap area and follow <a href="http://www.prowebdev.us/2012/05/amazon-ec2-linux-micro-swap-space.html">these steps</a> to prevent MySQL server from crashing.</p>
+<p>In Gulp you define an origin, which is a directory where all files to be processed reside. Filters and wildcards can be used here, so in this case we would like to process all js files in every directory within the client directory.</p>
 
-<p>Install FTP</p>
-
-<pre><code>sudo yum install vsftpd
+<pre><code>var paths = {
+  scripts: ['client/js/**/*.js']
+};
 </code></pre>
 
-<p>Install the DB4 package</p>
+<p>Then, we define our tasks and chain our streams. In this example, we create a task called <em>scripts</em>, process all js files, send them to uglify(), concat the result into a new file called <em>all.min.js</em> and finally store them at the <em>build/js</em> directory (which is automatically created if it does not exist).</p>
 
-<pre><code>sudo yum install db4-utils
+<pre><code>gulp.task('scripts', function() {
+  // Minify and copy all JavaScript (except vendor scripts)
+  return gulp.src(paths.scripts)
+    .pipe(uglify())
+    .pipe(concat('all.min.js'))
+    .pipe(gulp.dest('build/js'));
+});
 </code></pre>
 
-<p>Create the list of virtual users</p>
+<p>We can create as many tasks as we like.</p>
 
-<pre><code>/etc/vsftpd/virtual-users.txt 
+<pre><code>// Another task
+gulp.task('another', function() {
+  ...
+});
 </code></pre>
 
-<p>and add your users like this</p>
+<p>Finally we could even create a task that depends on previous tasks. What it does is to execute all referenced tasks.</p>
 
-<pre><code>username
-password
-username
-password
+<pre><code>// The default task (called when you run `gulp` from cli)
+gulp.task('default', ['scripts', 'another']);
 </code></pre>
 
-<p>Create the DB4 database like this</p>
+<p><strong>Important: </strong> It is important to understand that in the last command, tasks are executed asynchronously, which means that <em>another</em> will not necessarily be executed <em>after</em> <em>scripts</em>. If we need to run dependent tasks in order, we must use another npm package called: <a href="https://www.npmjs.org/package/run-sequence">run-sequence</a>.</p>
 
-<pre><code>db_load -T -t hash -f virtual-users.txt /etc/vsftpd/virtual-users.db
+<p>As I said, once you start with Gulp, you will see how many useful apps are available at <a href="https://www.npmjs.org/">npm</a>.</p>
+
+<p>Last but not least, all you have to do to execute your tasks is this</p>
+
+<pre><code>gulp default
 </code></pre>
 
-<p>Create the PAM file</p>
+<p>Pretty awesome uh?</p>
 
-<pre><code>sudo vim /etc/pam.d/vsftpd-virtual
-</code></pre>
-
-<p>and add the following content</p>
-
-<pre><code>auth required pam_userdb.so db=/etc/vsftpd/virtual-users
-account required pam_userdb.so db=/etc/vsftpd/virtual-users
-</code></pre>
-
-<p>Make sure the reference name (virtual-users) matches the name you chose for your virtual users file.</p>
-
-<p>Create your configuration file</p>
-
-<pre><code>sudo vim /etc/vsftpd/vsftpd.conf
-</code></pre>
-
-<p>This is a configuration file as an example</p>
-
-<pre><code>anonymous_enable=NO
-local_enable=YES
-write_enable=YES
-local_umask=022
-force_dot_files=YES
-listen_port=21
-listen=YES
-background=YES
-dirmessage_enable=YES
-xferlog_enable=YES
-connect_from_port_20=YES
-xferlog_std_format=YES
-guest_enable=YES
-guest_username=apache
-local_root=/var/www
-pam_service_name=vsftpd-virtual
-guest_enable=YES
-userlist_enable=YES
-tcp_wrappers=YES
-pasv_enable=YES
-pasv_max_port=6000
-pasv_min_port=5000
-pasv_address=54.201.210.12
-virtual_use_local_privs=YES
-hide_ids=YES
-user_config_dir=/etc/vsftpd/vsftpd_user_conf
-</code></pre>
-
-<p><em>pasv_address</em> must be your instance public IP
-<em>pam_service_name</em> corresponds to the PAM file we have previously created
-<em>local_root</em> is the directory you will access when connecting via FTP
-<em>user_config_dir</em> is an optional directory with files named after virtual users, storing custom paths and/or settings.
-<em>pasv_max_port</em> and <em>pasv_min_port</em> are arbitrary ports that must be open otherwise there will be errors when transferring files.</p>
-
-<p>Make sure the apache user has read and write permissions on the web root directory.</p>
-
-<pre><code>chown apache:apache /var/www/html
-</code></pre>
-
-<p>Restart the service</p>
-
-<pre><code>sudo service vsftpd restart
-sudo chkconfig vsftpd on
-</code></pre>
-
-<p>Important: This is a plain FTP server. If you prefer to access your files using FTP clients over SSH, please make sure to give your <em>ec2-user</em> access to your web folder.</p>
-
-<pre><code>sudo usermod -a -G apache ec2-user
-</code></pre>
+<p>Happy coding!</p>
 </div>
   
   
@@ -311,6 +363,8 @@ sudo chkconfig vsftpd on
     </article>
   
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -323,6 +377,14 @@ sudo chkconfig vsftpd on
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/04/26/removing-unused-css/">Removing Unused CSS</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/04/26/removing-unused-css/">Removing Unused Css</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/04/20/it-is-all-about-streams/">It Is All About Streams</a>
@@ -340,7 +402,7 @@ sudo chkconfig vsftpd on
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/aws/'>AWS (1)</a></li><li><a href='/blog/categories/gulp-dot-js/'>Gulp.js (1)</a></li><li><a href='/blog/categories/node-dot-js/'>Node.js (1)</a></li><li><a href='/blog/categories/opinion/'>Opinion (1)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/aws/'>AWS (1)</a></li><li><a href='/blog/categories/css/'>Css (1)</a></li><li><a href='/blog/categories/gulp-dot-js/'>Gulp.js (1)</a></li><li><a href='/blog/categories/node-dot-js/'>Node.js (2)</a></li><li><a href='/blog/categories/opinion/'>Opinion (1)</a></li></ul>
 </section>
 
 
