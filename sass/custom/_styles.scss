@@ -1,5 +1,25 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
-h1 {
-  font-weight: normal;
+h1, h2 {
+  font-weight: 300;
 }
+
+body { font-size: 1em; }
+h1 { font-size: 2.1em; line-height: 1.2em; }
+ol,ul { margin-left: 2em; }
+
+a {
+	text-decoration: none;
+
+	&:hover{
+		text-decoration: none;
+	}
+}
+
+.aside.sidebar section {
+	font-size: 15px;
+}
+
+ article header h1 a:hover {
+ 	text-decoration: none;
+ }
