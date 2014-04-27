@@ -4,7 +4,7 @@
   <title><![CDATA[Wilman Arambillete]]></title>
   <link href="http://warambil.com/atom.xml" rel="self"/>
   <link href="http://warambil.com/"/>
-  <updated>2014-04-27T02:35:54-03:00</updated>
+  <updated>2014-04-27T02:39:34-03:00</updated>
   <id>http://warambil.com/</id>
   <author>
     <name><![CDATA[Wilman Arambillete]]></name>
@@ -19,7 +19,7 @@
     <link href="http://warambil.com/blog/2014/04/26/removing-unused-css/"/>
     <updated>2014-04-26T21:25:26-03:00</updated>
     <id>http://warambil.com/blog/2014/04/26/removing-unused-css</id>
-    <content type="html"><![CDATA[<p><img class="left" src="http://warambil.com/images/unused-css.png" width="400" title="unused-css" alt="images"></p>
+    <content type="html"><![CDATA[<p><img class="left" src="http://warambil.com/images/unused-css.png" title="unused-css" alt="images"></p>
 
 <p>It seems as if all web developers are lately aiming at reducing the size of the content delivered to the browser.</p>
 
