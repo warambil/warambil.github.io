@@ -9,7 +9,7 @@
   <meta name="author" content="Wilman Arambillete">
 
   
-  <meta name="description" content="html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } body{ color:#444; font-family:Georgia, &hellip;">
+  <meta name="description" content="For Kramer it was all about levels, for us it is all about streams. I bumped into Gulp.js not so long ago, more specifically when I started working &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -84,7 +84,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/04/26/removing-unused-css/">Removing Unused Css</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/04/20/it-is-all-about-streams/">It Is All About Streams</a></h1>
     
     
       <p class="meta">
@@ -100,149 +100,262 @@
   
 
 
-<time datetime="2014-04-26T00:00:00-03:00" pubdate data-updated="true"></time>
+<time datetime="2014-04-20T12:27:30-03:00" pubdate data-updated="true">Apr 20<span>th</span>, 2014</time>
         
-           | <a href="/blog/2014/04/26/removing-unused-css/#disqus_thread"
-             data-disqus-identifier="http://warambil.com/blog/2014/04/26/removing-unused-css/">Comments</a>
+           | <a href="/blog/2014/04/20/it-is-all-about-streams/#disqus_thread"
+             data-disqus-identifier="http://warambil.com/blog/2014/04/20/it-is-all-about-streams/">Comments</a>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><!DOCTYPE html><html><head><meta charset="utf-8"><style>html { font-size: 100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  <div class="entry-content"><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/aQyXeLSL0II "></iframe></div>
 
-body{
-  color:#444;
-  font-family:Georgia, Palatino, &#8216;Palatino Linotype&#8217;, Times, &#8216;Times New Roman&#8217;,
-              &#8220;Hiragino Sans GB&#8221;, &#8220;STXihei&#8221;, &#8220;微软雅黑&#8221;, serif;
-  font-size:12px;
-  line-height:1.5em;
-  background:#fefefe;
-  width: 45em;
-  margin: 10px auto;
-  padding: 1em;
-  outline: 1300px solid #FAFAFA;
+
+<p>For Kramer it was all about <em>levels</em>, for us it is all about <em>streams</em>. I bumped into <a href="http://gulpjs.com/">Gulp.js</a> not so long ago, more specifically when I started working on a Yeoman generator project for my job.
+I needed to create a new generator to scaffold a Javascript ecommerce application we use, which was very hard to deploy.</p>
+
+<p>So I created this Yeoman generator and when I had to decide whether to use <a href="http://gruntjs.com/">Grunt.js</a> or Gulp, I tried them both but I felt in love with Gulp.js right away.</p>
+
+<p>For starters, Gulp concept is way more superior than Grunt, in terms of how tasks are being processed. In Grunt you just create regular tasks using javascript, which is cool but with Gulp gets the best out of node.js by using pure <em>streams</em>.</p>
+
+<p>And here&rsquo;s why I chose Kramer to start this post with, it is not about <em>levels</em> but about <em>streams</em>, although in a sense, even when pipes is a concept that comes from the old Unix world, it is not that easy to grasp.
+However, once you discover it, you&rsquo;ll want to do everything with pipes.</p>
+
+<h2>What are streams?</h2>
+
+<p>As we know, at the <a href="http://nodejs.org/">node.js</a> world, every interaction with disk and network involves passing callbacks to functions. When we think of reading and processing a file, we think of something like this:</p>
+
+<pre><code>var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, res) {
+    fs.readFile(__dirname + '/myfile.txt', function (err, data) {
+        res.end(data);
+    });
+});
+server.listen(8000);
+</code></pre>
+
+<p>This code implies that the whole file will have to be buffered into memory before it starts being sent to the client. This would be our first approach to solve this, however it is clearly not an ideal solution in terms of performance.</p>
+
+<p>However, Node.js provides us with a more efficient way to deal with this scenario: using something called streams. Let&rsquo;s take a look at this code:</p>
+
+<pre><code>var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, res) {
+    var stream = fs.createReadStream(__dirname + '/myfile.txt');
+    stream.pipe(res);
+});
+server.listen(8000);
+</code></pre>
+
+<p>In this example, we create a reader stream and it is the <em>pipe</em> function which takes care of listening and sending chunks of this file immediately after the file is read from the disk.</p>
+
+<p>Besides, the use of <em>pipe</em> provides us with an extra benefit, it handles buffering efficiently so no data will be sent to the client if the client is not ready to process it, (probably due to a slow connection network or high-latency issues).</p>
+
+<p>Now we can see streams are useful but how can we use them and most importantly, what can Gulp.js do for us?</p>
+
+<p>Let&rsquo;s take a brief tour on the streams node.js has to offer.</p>
+
+<p>Streams are connected using the pipe() function we have just seen, so just as it worked with Unix in the old days, chaining commands like this</p>
+
+<pre><code>ls | grep "setup_" | wc -l
+</code></pre>
+
+<p>works in node.js like this</p>
+
+<p>.pipe(task1)
+.pipe(task2)
+.pipe(task3)</p>
+
+<p><strong>FYI:</strong> What the previous Unix command does is to list the directory content, send the result to a grep command to filter those entries with the &ldquo;setup_&rdquo; pattern in their name and finally counting the resulting lines.</p>
+
+<h3>Types of streams</h3>
+
+<p>There are 5 types of streams: readable, writable, transform, duplex and classic but we are going to briefly cover just the first four ones in this post.</p>
+
+<h3>Readable</h3>
+
+<p>Readable streams create data that can be consumed by other streams like writable, transform or duplex streams.</p>
+
+<p>In order to create a readable stream we can do something like this:</p>
+
+<pre><code>var Readable = require('stream').Readable;
+var rs = new Readable;
+rs.push('hello ');
+rs.push('world\n');
+rs.push(null);
+rs.pipe(process.stdout);
+
+$ node myreadstream.js
+hello world
+</code></pre>
+
+<p>We define a readable stream, push some content ending with <em>null</em>, (which is very important since this is what triggers the <em>end</em> event) and finally we pipe the result to the next stream.
+In this case we use <em>process.stdout</em> to display the result directly to the console (standard output).</p>
+
+<p>In the previous example, we are pushing content directly but we could use the <em>_read</em> function to push chunks on-demand, which means only send data when the client asks for it.</p>
+
+<h3>Writable</h3>
+
+<p>This a stream for writing, which means you can <em>pipe</em> but you cannot use <em>src.pipe(writableStream)</em></p>
+
+<p>Let&rsquo;s see an example of it</p>
+
+<pre><code>var Writable = require('stream').Writable,
+
+var ws = Writable();
+ws._write = function(chunk, enc, next) {
+    var message = {
+        timestamp: new Date().getTime(),
+        message: chunk.toString('utf8')
+    }
+    console.dir(message);
+    next();
+};
+process.stdin.pipe(ws);
+
+echo "This is a log message" | node mywritestream.js
+</code></pre>
+
+<p>In this example we create a <em>Writer</em> stream that could be used as a logger. <em>Writer</em> streams use the <em>write</em> function which receives the following parameters:</p>
+
+<ul>
+<li>chunk = What the <em>Reader</em> stream sends</li>
+<li>encoding = Very important when using strings</li>
+<li>next(err) = It is the callback that tells the consumer that they can write more data. An optional <em>err</em> object parameter can be passed which emits an error event to the stream instance.</li>
+</ul>
+
+
+<h3>Transform</h3>
+
+<p>Transform streams better known as <em>through</em> streams are the ones that allow read and write data. They are mainly used to read data, transform it somehow and write it out.</p>
+
+<p>A good example could be a stream for reversing sentences.</p>
+
+<pre><code>var stream = require('stream'),
+    util = require('util');
+var Transform = stream.Transform;
+var Reverse = function(options) {
+    Transform.call(this, options);
+    this._reversedText = ''; 
+}
+util.inherits(Reverse, Transform);
+Reverse.prototype._transform = function(chunk, encoding, callback) {
+    var text = chunk.toString('utf8');
+    this._reversedText = text.split(' ').reverse().join(' ') + this._reversedText;
+    callback();
+}
+Reverse.prototype._flush = function(callback) {
+    this.push(this._reversedText, 'utf8');
+    callback();
 }
 
-a{ color: #0645ad; text-decoration:none;}
-a:visited{ color: #0b0080; }
-a:hover{ color: #06e; }
-a:active{ color:#faa700; }
-a:focus{ outline: thin dotted; }
-a:hover, a:active{ outline: 0; }
+//Here's how we use this stream
+var reverseStream = new Reverse();
+reverseStream.on('data', function(data) {
+    console.log(data.toString('utf8'));
+});
+reverseStream.write('Hello ');
+reverseStream.write('World ');
+reverseStream.end();
+</code></pre>
 
-span.backtick {
-  border:1px solid #EAEAEA;
-  border-radius:3px;
-  background:#F8F8F8;
-  padding:0 3px 0 3px;
-}
+<p>As we can see, we create a new Transform stream, declare a variable where we will store the modified text called: <em>_reversedText</em>.</p>
 
-::-moz-selection{background:rgba(255,255,0,0.3);color:#000}
-::selection{background:rgba(255,255,0,0.3);color:#000}
+<p>Finally, the <em>transform</em> function is where all the magic happens. We transform the data into a String format, split the text by spaces, reverse the array and join it back as a string with spaces.</p>
 
-a::-moz-selection{background:rgba(255,255,0,0.3);color:#0645ad}
-a::selection{background:rgba(255,255,0,0.3);color:#0645ad}
+<p>When the <em>flush</em> function is called the text is pushed.</p>
 
-p{
-margin:1em 0;
-}
+<p>In order to try this, we create a new instance of our stream and data is sent to standard output upon receiving it, check the <em>on</em> event.</p>
 
-img{
-max-width:100%;
-}
+<h3>Duplex</h3>
 
-h1,h2,h3,h4,h5,h6{
-font-weight:normal;
-color:#111;
-line-height:1em;
-}
-h4,h5,h6{ font-weight: bold; }
-h1{ font-size:2.5em; }
-h2{ font-size:2em; border-bottom:1px solid silver; padding-bottom: 5px; }
-h3{ font-size:1.5em; }
-h4{ font-size:1.2em; }
-h5{ font-size:1em; }
-h6{ font-size:0.9em; }
+<p>These are special kind of <em>Transform</em> streams that allow bidirectional data flow.</p>
 
-blockquote{
-color:#666666;
-margin:0;
-padding-left: 3em;
-border-left: 0.5em #EEE solid;
-}
-hr { display: block; height: 2px; border: 0; border-top: 1px solid #aaa;border-bottom: 1px solid #eee; margin: 1em 0; padding: 0; }
+<pre><code>a.pipe(b).pipe(a)
+</code></pre>
 
+<p>Chats are a good example when duplex streams could be used.</p>
 
-pre , code, kbd, samp { 
-  color: #000; 
-  font-family: monospace; 
-  font-size: 0.88em; 
-  border-radius:3px;
-  background-color: #F8F8F8;
-  border: 1px solid #CCC; 
-}
-pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 5px 12px;}
-pre code { border: 0px !important; padding: 0;}
-code { padding: 0 3px 0 3px; }
+<h2>What about Gulp.js?</h2>
 
-b, strong { font-weight: bold; }
+<p>So far we have written about streams but how can we use those streams?.
+Truth be told, although it is really fun to play with streams, most of the times you will probably find yourself digging into <a href="https://www.npmjs.org/">npm</a> packages trying to find a gulp stream that solve your problems. And most of them times you will be successful at your search.</p>
 
-dfn { font-style: italic; }
+<h3>Installation</h3>
 
-ins { background: #ff9; color: #000; text-decoration: none; }
+<p>The first we have to do is to download <a href="http://gulpjs.com/">Gulp.js</a> and install it.</p>
 
-mark { background: #ff0; color: #000; font-style: italic; font-weight: bold; }
+<pre><code>node install -g gulp 
+</code></pre>
 
-sub, sup { font-size: 75%; line-height: 0; position: relative; vertical-align: baseline; }
-sup { top: -0.5em; }
-sub { bottom: -0.25em; }
+<h3>Tasks</h3>
 
-ul, ol { margin: 1em 0; padding: 0 0 0 2em; }
-li p:last-child { margin:0 }
-dd { margin: 0 0 0 2em; }
+<p>Then, you have to create your <em>GulpFile.js</em> and start adding your tasks.</p>
 
-img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+<p>In order to understand how tasks are defined, let&rsquo;s take a look at a GulpFile.js file.</p>
 
-table { border-collapse: collapse; border-spacing: 0; }
-td { vertical-align: top; }
+<p>Firstly, you call the needed requires according to the packages you need. In this example, you will need <em>gulp-concat and gulp-uglify</em>.</p>
 
-@media only screen and (min-width: 480px) {
-body{font-size:14px;}
-}
+<p><strong><em>Important</em></strong> Make sure to download these packages before using them.</p>
 
-@media only screen and (min-width: 768px) {
-body{font-size:16px;}
-}
+<pre><code>npm install gulp-concat gulp-uglify
+</code></pre>
 
-@media print {
-  * { background: transparent !important; color: black !important; filter:none !important; -ms-filter: none !important; }
-  body{font-size:12pt; max-width:100%; outline:none;}
-  a, a:visited { text-decoration: underline; }
-  hr { height: 1px; border:0; border-bottom:1px solid black; }
-  a[href]:after { content: &#8221; (&#8221; attr(href) &#8220;)&#8221;; }
-  abbr[title]:after { content: &#8221; (&#8221; attr(title) &#8220;)&#8221;; }
-  .ir a:after, a[href^=&#8221;javascript:&#8221;]:after, a[href^=&#8221;#&#8221;]:after { content: &#8220;&#8221;; }
-  pre, blockquote { border: 1px solid #999; padding-right: 1em; page-break-inside: avoid; }
-  tr, img { page-break-inside: avoid; }
-  img { max-width: 100% !important; }
-  @page :left { margin: 15mm 20mm 15mm 10mm; }
-  @page :right { margin: 15mm 10mm 15mm 20mm; }
-  p, h2, h3 { orphans: 3; widows: 3; }
-  h2, h3 { page-break-after: avoid; }
-}
-</style><title>2014-04-26-removing-unused-css</title></head><body><hr />
-<p>layout: post
-title: &#8220;Removing unused CSS&#8221;
-date: 2014-04-26 21:25:26 -0300
-comments: true
-categories: [Css, Node.js]</p>
-<hr />
-<p><img class="left" src="/images/unused-css.png" width="400" title="unused-css" alt="images"></p>
-<p>It seems as if all web developers are lately aiming at reducing the size of the content delivered to the browser.
-It is in fact a big challenge and optimizing a web site content delivery might imply a great deal of tweaks and tricks to successfully accomplish it.</p>
-<p>Mod_pagespeed Apache module </p></body></html></div>
+<p>Then you can create your file like this</p>
+
+<pre><code>var gulp = require('gulp');
+var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+</code></pre>
+
+<p>In Gulp you define an origin, which is a directory where all files to be processed reside. Filters and wildcards can be used here, so in this case we would like to process all js files in every directory within the client directory.</p>
+
+<pre><code>var paths = {
+  scripts: ['client/js/**/*.js']
+};
+</code></pre>
+
+<p>Then, we define our tasks and chain our streams. In this example, we create a task called <em>scripts</em>, process all js files, send them to uglify(), concat the result into a new file called <em>all.min.js</em> and finally store them at the <em>build/js</em> directory (which is automatically created if it does not exist).</p>
+
+<pre><code>gulp.task('scripts', function() {
+  // Minify and copy all JavaScript (except vendor scripts)
+  return gulp.src(paths.scripts)
+    .pipe(uglify())
+    .pipe(concat('all.min.js'))
+    .pipe(gulp.dest('build/js'));
+});
+</code></pre>
+
+<p>We can create as many tasks as we like.</p>
+
+<pre><code>// Another task
+gulp.task('another', function() {
+  ...
+});
+</code></pre>
+
+<p>Finally we could even create a task that depends on previous tasks. What it does is to execute all referenced tasks.</p>
+
+<pre><code>// The default task (called when you run `gulp` from cli)
+gulp.task('default', ['scripts', 'another']);
+</code></pre>
+
+<p><strong>Important: </strong> It is important to understand that in the last command, tasks are executed asynchronously, which means that <em>another</em> will not necessarily be executed <em>after</em> <em>scripts</em>. If we need to run dependent tasks in order, we must use another npm package called: <a href="https://www.npmjs.org/package/run-sequence">run-sequence</a>.</p>
+
+<p>As I said, once you start with Gulp, you will see how many useful apps are available at <a href="https://www.npmjs.org/">npm</a>.</p>
+
+<p>Last but not least, all you have to do to execute your tasks is this</p>
+
+<pre><code>gulp default
+</code></pre>
+
+<p>Pretty awesome uh?</p>
+
+<p>Happy coding!</p>
+</div>
   
   
 
@@ -267,10 +380,6 @@ It is in fact a big challenge and optimizing a web site content delivery might i
     
       <li class="post">
         <a href="/blog/2014/04/26/removing-unused-css/">Removing Unused CSS</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/26/removing-unused-css/">Removing Unused Css</a>
       </li>
     
       <li class="post">
