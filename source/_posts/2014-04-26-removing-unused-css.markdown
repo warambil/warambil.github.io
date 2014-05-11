@@ -6,7 +6,7 @@ comments: true
 categories: [Css, Node.js]
 ---
 
-{% img left /images/unused-css.png 400 'unused-css' 'images' %}
+{% img left /images/unused-css.png 'unused-css' 'images' %}
 
 It seems as if all web developers are lately aiming at reducing the size of the content delivered to the browser.
 
